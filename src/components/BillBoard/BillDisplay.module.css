@@ -1,0 +1,9 @@
+.billsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.billContainer {
+    display: flex;
+    justify-content: space-around;
+}

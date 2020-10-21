@@ -1,0 +1,19 @@
+.item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    margin: 10px;
+}
+
+.unordered_list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.addUserForm {
+}
+
+.formBtnGroup {
+    margin-top: 20px;
+}
