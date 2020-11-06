@@ -1,9 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import userEvent from '@testing-library/user-event';
+import SummaryBoard from './components/Summary/SummaryBoard';
+import UserBoard from './components/UserBoard/UserBoard';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+import { Provider } from 'react-redux';
+import store from './app/store';
+
+test('test all', () => {
+    expect(1).toBe(1);
 });

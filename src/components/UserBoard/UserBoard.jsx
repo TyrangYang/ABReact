@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { useForm } from 'react-hook-form';
 
-import { Button, TextField, IconButton, Paper } from '@material-ui/core';
+import { Button, TextField, IconButton } from '@material-ui/core';
+import Paper from '../CustomContainer';
 import { Delete, Check } from '@material-ui/icons';
 import Styles from './UserBoard.module.css';
 
@@ -75,7 +76,12 @@ function UserBoard() {
                     let { id, name } = e;
                     return (
                         <li key={id}>
-                            <Paper className={Styles.item}>
+                            <Paper
+                                style={{
+                                    alignItems: 'center',
+                                    margin: '10px',
+                                }}
+                            >
                                 <div>{name}</div>
                                 <IconButton
                                     color="secondary"

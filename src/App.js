@@ -1,15 +1,10 @@
 import React from 'react';
 import './App.css';
-import UserBoard from './components/UserBoard/UserBoard';
-import BillBoard from './components/BillBoard/BillBoard';
-import SummaryBoard from './components/SummaryBoard/SummaryBoard';
-
+import Layout from './components/Layout';
 function App() {
     return (
         <div className="App">
-            <SummaryBoard />
-            <UserBoard />
-            <BillBoard />
+            <Layout />
         </div>
     );
 }

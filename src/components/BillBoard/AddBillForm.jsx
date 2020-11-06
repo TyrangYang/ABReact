@@ -26,33 +26,30 @@ const AddBillForm = () => {
     const [showAddBillForm, setShowAddBillForm] = useState(false);
     return (
         <div>
-            <h2>Bills</h2>
             {!showAddBillForm ? (
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={() => setShowAddBillForm(true)}
+                    data-testid="add-new-bill-btn"
                 >
                     Add New Bill
                 </Button>
             ) : (
                 <form
+                    data-testid="add-new-bill-form"
                     className={Styles.addBillForm}
                     onSubmit={handleSubmit((e) => {
                         dispatch(
                             addBill({
                                 id: uuidV4(),
-                                payer: e.payer[0],
-                                payerName: e.payer[1],
+                                payer: e.payer,
                                 amount: {
                                     amount: +e.amount * 100,
                                     currency: 'USD',
                                     precision: 2,
                                 },
-                                participants: e.participants.map((e) => e[0]),
-                                participantsName: e.participants.map(
-                                    (e) => e[1]
-                                ),
+                                participants: e.participants,
                                 date: e.date,
                             })
                         );
@@ -66,10 +63,7 @@ const AddBillForm = () => {
                             as={
                                 <Select labelId="Payer_label" value="">
                                     {allUsers.map((e) => (
-                                        <MenuItem
-                                            key={e.id}
-                                            value={[e.id, e.name]}
-                                        >
+                                        <MenuItem key={e.id} value={e.id}>
                                             {e.name}
                                         </MenuItem>
                                     ))}
@@ -87,6 +81,7 @@ const AddBillForm = () => {
 
                     {/* amount */}
                     <TextField
+                        data-testid="add-bill-amount"
                         label="Amount"
                         name="amount"
                         type="number"
@@ -109,10 +104,7 @@ const AddBillForm = () => {
                             as={
                                 <Select multiple labelId="test">
                                     {allUsers.map((e) => (
-                                        <MenuItem
-                                            key={e.id}
-                                            value={[e.id, e.name]}
-                                        >
+                                        <MenuItem key={e.id} value={e.id}>
                                             {e.name}
                                         </MenuItem>
                                     ))}
@@ -145,7 +137,12 @@ const AddBillForm = () => {
                         helperText={!!errors.date && errors.date.message}
                     />
 
-                    <Button variant="contained" color="primary" type="submit">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        data-testid="submit-btn"
+                    >
                         Confirm
                     </Button>
                     <Button
@@ -155,6 +152,7 @@ const AddBillForm = () => {
                             e.preventDefault();
                             setShowAddBillForm(false);
                         }}
+                        data-testid="cancel-btn"
                     >
                         Cancel
                     </Button>

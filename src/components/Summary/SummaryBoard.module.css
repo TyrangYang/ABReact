@@ -1,0 +1,10 @@
+.tools {
+    display: flex;
+    align-items: center;
+}
+
+.switchGroup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
