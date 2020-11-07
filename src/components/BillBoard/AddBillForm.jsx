@@ -10,10 +10,13 @@ import {
     Button,
     FormControl,
     InputLabel,
-    Select,
     FormHelperText,
-    MenuItem,
     TextField,
+    Select,
+    MenuItem,
+    Switch,
+    Slider,
+    Grid,
 } from '@material-ui/core';
 import Styles from './AddBillForm.module.css';
 
@@ -21,9 +24,15 @@ const AddBillForm = () => {
     const { allUsers } = useSelector((state) => state.Users);
     const dispatch = useDispatch();
 
-    const { handleSubmit, register, errors, control } = useForm();
+    const { handleSubmit, register, watch, errors, control } = useForm();
 
-    const [showAddBillForm, setShowAddBillForm] = useState(false);
+    const [showAddBillForm, setShowAddBillForm] = useState(true);
+
+    const [showUnevenlySplit, setShowUnevenlySplit] = useState(true);
+
+    const formState = watch();
+    console.log(formState);
+    const [testVal, settestVal] = useState(20);
     return (
         <div>
             {!showAddBillForm ? (
@@ -136,6 +145,36 @@ const AddBillForm = () => {
                         error={!!errors.date}
                         helperText={!!errors.date && errors.date.message}
                     />
+                    <div>
+                        <label id="open-unevenly">Unevenly split</label>
+                        <Switch
+                            checked={showUnevenlySplit}
+                            onChange={(e) =>
+                                setShowUnevenlySplit(e.target.checked)
+                            }
+                            color="primary"
+                            aria-labelledby="open-unevenly"
+                        />
+                    </div>
+                    {showUnevenlySplit &&
+                        formState.participants &&
+                        formState.amount &&
+                        formState.participants.map((eachParticipants, idx) => (
+                            <Grid key={idx} container spacing={2}>
+                                <Grid item>{eachParticipants}</Grid>
+                                <Grid item xs>
+                                    <Slider
+                                        value={testVal}
+                                        onChange={(e, newVal) =>
+                                            settestVal(newVal)
+                                        }
+                                        min={0}
+                                        max={+formState.amount}
+                                        valueLabelDisplay="auto"
+                                    />
+                                </Grid>
+                            </Grid>
+                        ))}
 
                     <Button
                         variant="contained"

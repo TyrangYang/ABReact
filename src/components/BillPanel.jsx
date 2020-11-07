@@ -9,7 +9,7 @@ import useSummary from '../hooks/useSummary';
 
 export default function BillPanel() {
     const [showChart, setShowChart] = useState(false);
-    const [_, payerList, receiverList] = useSummary();
+    const [, payerList, receiverList] = useSummary();
 
     const [tabIdx, setTabIdx] = useState(0);
 
@@ -20,7 +20,6 @@ export default function BillPanel() {
                 value={tabIdx}
                 onChange={(e, newIdx) => setTabIdx(newIdx)}
                 indicatorColor="primary"
-                variant="scrollable"
                 aria-label="tabs"
                 centered
             >

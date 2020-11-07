@@ -7,10 +7,10 @@ export default function Layout() {
     return (
         <>
             <Grid container>
-                <Grid item sm={8}>
+                <Grid item sm={10}>
                     <BillPanel />
                 </Grid>
-                <Grid item sm={4}>
+                <Grid item sm={2}>
                     <UserPanel />
                 </Grid>
             </Grid>

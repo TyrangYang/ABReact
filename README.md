@@ -1,68 +1,30 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# ABReact (awesome-bill-recorder in react)
 
-## Available Scripts
+## Introduction
 
-In the project directory, you can run:
+This is a bill recording web application developed using ReactJs. It can come in handy when you want to record daily spending with friends and split the bills.
 
-### `npm start`
+## Design
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Currently it is a single-page application, and there are 3 components each taking care of a block of functionalities. Adding/Deleting users and displaying their names are handled by the User component. Adding a new bill and displaying/sorting bills is happening in the Bill component. Summary component is responsible for summing up who owes who how much money.
+Since it's purely frontend for now, our main data is currently saved only in parent component and all child components are passing data to the parent.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Dependencies used
 
-### `npm test`
+1. [Dinero.js](https://dinerojs.com/) to help in handling currency and format
+2. [Moment.js](https://momentjs.com/) for date recording and formatting
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+1. Add, remove and view users
+2. Add new bill entry with payer, total amount and list of participants.
+    - Payer and participants can only be selected from existing users.
+    - Date can either be included or left out. If choose to include, date is editable and default to today.
+    - Total amount can either be split evenly or unevenly. Default is evenly split. If choose unevenly split, can edit amount for each participant.
+3. View list of bills. Bills can be sorted by Payer name, amount or date. Bill entries without date are placed to the end of the list if choose to sort by date.
+4. View list of summaries that sum up the bill entries and display who owes who how much money.
+    - Summaries can be sorted by payer name, receiver name or amount.
+    - Summaries can be merged so that users can pay up more conveniently.
+    - Each summary can be settled and removed from the list
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Future Plans
