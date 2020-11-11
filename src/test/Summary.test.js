@@ -6,16 +6,14 @@ import SummaryBoard from '../components/Summary/SummaryBoard';
 import { Provider } from 'react-redux';
 import store from '../app/store';
 
-describe('Test Summary', () => {
-    test('render chart', () => {
-        const { getAllByRole, queryByTestId } = render(
-            <Provider store={store}>
-                <SummaryBoard />
-            </Provider>
-        );
+test('render chart', () => {
+    const { getAllByRole, queryByTestId } = render(
+        <Provider store={store}>
+            <SummaryBoard />
+        </Provider>
+    );
 
-        expect(queryByTestId('pieChart')).toBeNull();
-        userEvent.click(getAllByRole('checkbox')[1]);
-        expect(queryByTestId('pieChart')).not.toBeNull();
-    });
+    expect(queryByTestId('pieChart')).toBeNull();
+    userEvent.click(getAllByRole('checkbox')[1]);
+    expect(queryByTestId('pieChart')).not.toBeNull();
 });

@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useForm } from 'react-hook-form';
 
 import { Button, TextField, IconButton } from '@material-ui/core';
-import Paper from '../CustomContainer';
+import Paper from '../ContentContainer/CustomContainer';
 import { Delete, Check } from '@material-ui/icons';
 import Styles from './UserBoard.module.css';
 

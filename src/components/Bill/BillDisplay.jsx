@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeBill } from '../../slice/billSlice';
 
 import { IconButton } from '@material-ui/core';
-import Paper from '../CustomContainer';
+import Paper from '../ContentContainer/CustomContainer';
 
 import { Delete } from '@material-ui/icons';
 import Styles from './BillDisplay.module.css';
@@ -32,7 +32,8 @@ const BillDisplay = () => {
                         <IconButton
                             color="secondary"
                             onClick={() => {
-                                dispatch(removeBill(e.id));
+                                if (window.confirm('Delete this Bill'))
+                                    dispatch(removeBill(e.id));
                             }}
                         >
                             <Delete />

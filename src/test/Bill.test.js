@@ -5,13 +5,15 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import store from '../app/store';
 
-import BillBoard from '../components/BillBoard/BillBoard';
+import AddBillForm from '../components/Bill/AddBillForm';
+import BillDisplay from '../components/Bill/BillDisplay';
 import 'mutationobserver-shim';
 
 beforeEach(() => {
     render(
         <Provider store={store}>
-            <BillBoard />
+            <AddBillForm />
+            <BillDisplay />
         </Provider>
     );
 });

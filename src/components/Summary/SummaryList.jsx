@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { addBill } from '../../slice/billSlice';
 import { v4 as uuidV4 } from 'uuid';
 import moment from 'moment';
 
-import Paper from '../CustomContainer';
+import Paper from '../ContentContainer/CustomContainer';
 import { Archive } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import { useUserName } from '../../hooks/useUserName';
@@ -47,6 +48,11 @@ const SummaryList = ({ summary, merged }) => {
             })}
         </div>
     );
+};
+
+SummaryList.prototype = {
+    summary: PropTypes.array,
+    merged: PropTypes.bool,
 };
 
 export default React.memo(SummaryList);

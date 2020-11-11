@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import AddBillForm from './BillBoard/AddBillForm';
-import BillDisplay from './BillBoard/BillDisplay';
-import SummaryBoard from './Summary/SummaryBoard';
-import { Tabs, Tab, Switch } from '@material-ui/core';
+import AddBillForm from '../Bill/AddBillForm';
+import BillDisplay from '../Bill/BillDisplay';
+import SummaryBoard from '../Summary/SummaryBoard';
+import { Tabs, Tab, Switch, Paper } from '@material-ui/core';
 
-import PieChart from './Summary/Charts/UserMoneyStatusPieChart';
-import useSummary from '../hooks/useSummary';
+import PieChart from '../Summary/Charts/UserMoneyStatusPieChart';
+import useSummary from '../../hooks/useSummary';
 
 export default function BillPanel() {
     const [showChart, setShowChart] = useState(false);
@@ -15,18 +15,26 @@ export default function BillPanel() {
 
     return (
         <div>
-            <AddBillForm />
-            <Tabs
-                value={tabIdx}
-                onChange={(e, newIdx) => setTabIdx(newIdx)}
-                indicatorColor="primary"
-                aria-label="tabs"
-                centered
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
             >
-                <Tab label="bill Record" />
-                <Tab label="transition" />
-                <Tab label="summary" />
-            </Tabs>
+                <Tabs
+                    value={tabIdx}
+                    onChange={(e, newIdx) => setTabIdx(newIdx)}
+                    indicatorColor="primary"
+                    aria-label="tabs"
+                >
+                    <Tab label="bill Record" />
+                    <Tab label="transition" />
+                    <Tab label="summary" />
+                </Tabs>
+                <AddBillForm />
+            </div>
+
             <div style={{ display: tabIdx === 0 ? 'block' : 'none' }}>
                 <BillDisplay />
             </div>

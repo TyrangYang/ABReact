@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 export const useUserName = () => {
     const { allUsers } = useSelector((state) => state.Users);
     const id_name_map = useMemo(() => {
-        console.log('new map');
+        // console.log('new map');
         return allUsers.reduce((acc, cur) => {
             acc[cur.id] = cur.name;
             return acc;
