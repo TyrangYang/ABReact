@@ -11,6 +11,8 @@ import Styles from './BillDisplay.module.css';
 import Dinero from 'dinero.js';
 import { useUserName } from '../../hooks/useUserName';
 
+import DeleteBtnConfirmModal from '../DeleteBtnConfirmModal';
+
 const BillDisplay = () => {
     const { allBills } = useSelector((state) => state.Bills);
     const dispatch = useDispatch();
@@ -29,15 +31,21 @@ const BillDisplay = () => {
                             ))}
                         </div>
                         <div>{e.date}</div>
-                        <IconButton
+                        <DeleteBtnConfirmModal
+                            confirmMessage="123"
+                            onClickDeleteButton={() => {
+                                dispatch(removeBill(e.id));
+                            }}
+                        />
+                        {/* <IconButton
                             color="secondary"
                             onClick={() => {
-                                if (window.confirm('Delete this Bill'))
+                                if (window.confirm('Delete?'))
                                     dispatch(removeBill(e.id));
                             }}
                         >
                             <Delete />
-                        </IconButton>
+                        </IconButton> */}
                     </Paper>
                 ))}
             </div>

@@ -94,7 +94,7 @@ const SummaryBoard = () => {
                     onChange={(e) => {
                         setSortState(e.target.value);
                     }}
-                    label="Sort"
+                    label="Arrangement"
                 >
                     <MenuItem value={0}>Group By Payer</MenuItem>
                     <MenuItem value={1}>Group By Receiver</MenuItem>

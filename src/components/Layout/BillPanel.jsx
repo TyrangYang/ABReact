@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import AddBillForm from '../Bill/AddBillForm';
 import BillDisplay from '../Bill/BillDisplay';
 import SummaryBoard from '../Summary/SummaryBoard';
-import { Tabs, Tab, Switch, Paper } from '@material-ui/core';
+import LayoutContainer from '../ContentContainer/LayoutContainer';
+
+import { Tabs, Tab, Switch } from '@material-ui/core';
 
 import PieChart from '../Summary/Charts/UserMoneyStatusPieChart';
 import useSummary from '../../hooks/useSummary';
@@ -14,7 +16,7 @@ export default function BillPanel() {
     const [tabIdx, setTabIdx] = useState(0);
 
     return (
-        <div>
+        <LayoutContainer style={{ height: '100vh' }}>
             <div
                 style={{
                     display: 'flex',
@@ -59,6 +61,6 @@ export default function BillPanel() {
                     )}
                 </div>
             )}
-        </div>
+        </LayoutContainer>
     );
 }

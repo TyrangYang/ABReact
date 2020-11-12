@@ -55,6 +55,22 @@ const AddBillForm = () => {
                         setShowAddBillForm(false);
                     }}
                 >
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <h2>ADD NEW BILL</h2>
+                        <IconButton
+                            onClick={() => {
+                                setShowAddBillForm(false);
+                            }}
+                        >
+                            <Close />
+                        </IconButton>
+                    </div>
                     <form
                         data-testid="add-new-bill-form"
                         className={Styles.addBillForm}
@@ -93,15 +109,6 @@ const AddBillForm = () => {
                             setShowAddBillForm(false);
                         })}
                     >
-                        <IconButton
-                            style={{ alignSelf: 'flex-end' }}
-                            onClick={() => {
-                                setShowAddBillForm(false);
-                            }}
-                        >
-                            <Close />
-                        </IconButton>
-
                         {/* payer */}
                         <FormControl error={!!errors.payer}>
                             <InputLabel id="Payer_label"> Payer </InputLabel>

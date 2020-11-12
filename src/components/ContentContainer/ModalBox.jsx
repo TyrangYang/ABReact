@@ -35,13 +35,16 @@ const ModalBox = (props) => {
                     props.onClickBackground();
             }}
         >
-            <Paper style={Styles.contentWrapper}>{props.children}</Paper>
+            <Paper style={{ ...Styles.contentWrapper, ...props.style }}>
+                {props.children}
+            </Paper>
         </div>
     );
 };
 
 ModalBox.propTypes = {
     onClickBackground: PropTypes.func,
+    style: PropTypes.object,
 };
 
 export default ModalBox;
