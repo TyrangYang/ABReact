@@ -1,11 +1,11 @@
 import React from 'react';
-import LayoutContainer from '../ContentContainer/LayoutContainer';
+import PanelContainer from '../ContentContainers/PanelContainer';
 import UserBoard from '../User/UserBoard';
 
 export default function UserPanel() {
     return (
-        <LayoutContainer style={{ height: '100vh' }}>
+        <PanelContainer style={{ height: '100vh' }}>
             <UserBoard />
-        </LayoutContainer>
+        </PanelContainer>
     );
 }

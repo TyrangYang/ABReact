@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { addUser, removeUser } from '../../slice/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import { useForm } from 'react-hook-form';
 
 import { Button, TextField, IconButton } from '@material-ui/core';
-import Paper from '../ContentContainer/CustomContainer';
+import Paper from '../ContentContainers/CustomContainer';
 import { Delete, Check } from '@material-ui/icons';
 import Styles from './UserBoard.module.css';
 
@@ -36,7 +36,7 @@ function UserBoard() {
                     onSubmit={handleSubmit((e) => {
                         dispatch(
                             addUser({
-                                id: uuidv4(),
+                                id: uuidV4(),
                                 name: e.newName.toUpperCase(),
                             })
                         );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Paper } from '@material-ui/core';
 
-const CustomContainer = (props) => {
+const PanelContainer = (props) => {
     return (
         <Paper
             elevation={3}
@@ -17,4 +17,4 @@ const CustomContainer = (props) => {
     );
 };
 
-export default React.memo(CustomContainer);
+export default React.memo(PanelContainer);

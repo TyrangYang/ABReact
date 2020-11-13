@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import ModalBox from './ContentContainer/ModalBox';
+import ModalBox from '../../ContentContainers/ModalBox';
 import {
     Button,
     IconButton,
@@ -10,9 +10,7 @@ import {
 } from '@material-ui/core';
 import { Delete, Close } from '@material-ui/icons';
 
-const DeleteBtnConfirmModal = (props) => {
-    const { confirmMessage, onClickDeleteButton } = props;
-
+const DeleteBtnWithConfirmModal = ({ confirmMessage, onClickDeleteButton }) => {
     const [confirmTapping, setConfirmTapping] = useState('');
 
     const [showModal, setShowModal] = useState(false);
@@ -36,7 +34,11 @@ const DeleteBtnConfirmModal = (props) => {
             {showModal && (
                 <ModalBox
                     onClickBackground={() => closeModal()}
-                    style={{ display: 'flex', flexDirection: 'column' }}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        padding: '20px',
+                    }}
                 >
                     <IconButton
                         onClick={() => closeModal()}
@@ -44,7 +46,10 @@ const DeleteBtnConfirmModal = (props) => {
                     >
                         <Close />
                     </IconButton>
-                    <Typography>
+                    <Typography
+                        fontWeight="fontWeightBold"
+                        style={{ margin: '10px 0' }}
+                    >
                         Please type
                         <span> {confirmMessage} </span>
                         to confirm.
@@ -61,6 +66,7 @@ const DeleteBtnConfirmModal = (props) => {
                         variant="contained"
                         color="secondary"
                         disabled={confirmMessage !== confirmTapping}
+                        style={{ marginTop: '10px ' }}
                         onClick={() => {
                             onClickDeleteButton();
                             setShowModal(false);
@@ -74,9 +80,9 @@ const DeleteBtnConfirmModal = (props) => {
     );
 };
 
-DeleteBtnConfirmModal.propTypes = {
+DeleteBtnWithConfirmModal.propTypes = {
     confirmMessage: PropTypes.string.isRequired,
     onClickDeleteButton: PropTypes.func.isRequired,
 };
 
-export default DeleteBtnConfirmModal;
+export default React.memo(DeleteBtnWithConfirmModal);

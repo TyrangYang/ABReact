@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Dinero from 'dinero.js';
-import SummaryList from './SummaryList';
+import SummaryDisplay from './SummaryDisplay';
 
 import { TextField, MenuItem, Checkbox } from '@material-ui/core';
 import styles from './SummaryBoard.module.css';
@@ -114,7 +114,7 @@ const SummaryBoard = () => {
                 </div>
             </div>
 
-            <SummaryList summary={filterFns(summary)} merged={merged} />
+            <SummaryDisplay summary={filterFns(summary)} merged={merged} />
         </div>
     );
 };

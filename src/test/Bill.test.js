@@ -69,5 +69,5 @@ test('Add new bill', async () => {
     });
     // screen.debug();
     // add a new one
-    expect(screen.getAllByTestId('containerItem')).toHaveLength(7);
+    expect(screen.getAllByTestId('billItem')).toHaveLength(7);
 });

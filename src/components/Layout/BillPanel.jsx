@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AddBillForm from '../Bill/AddBillForm';
 import BillDisplay from '../Bill/BillDisplay';
 import SummaryBoard from '../Summary/SummaryBoard';
-import LayoutContainer from '../ContentContainer/LayoutContainer';
+import PanelContainer from '../ContentContainers/PanelContainer';
 
 import { Tabs, Tab, Switch } from '@material-ui/core';
 
@@ -16,7 +16,7 @@ export default function BillPanel() {
     const [tabIdx, setTabIdx] = useState(0);
 
     return (
-        <LayoutContainer style={{ height: '100vh' }}>
+        <PanelContainer style={{ height: '100vh' }}>
             <div
                 style={{
                     display: 'flex',
@@ -61,6 +61,6 @@ export default function BillPanel() {
                     )}
                 </div>
             )}
-        </LayoutContainer>
+        </PanelContainer>
     );
 }

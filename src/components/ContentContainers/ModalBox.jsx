@@ -47,4 +47,4 @@ ModalBox.propTypes = {
     style: PropTypes.object,
 };
 
-export default ModalBox;
+export default React.memo(ModalBox);

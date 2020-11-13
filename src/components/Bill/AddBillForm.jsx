@@ -21,7 +21,7 @@ import {
 import { Add, Close } from '@material-ui/icons/';
 import Styles from './AddBillForm.module.css';
 import MultiLineSlider from './MultiLineSlider';
-import ModalBox from '../ContentContainer/ModalBox';
+import ModalBox from '../ContentContainers/ModalBox';
 
 const AddBillForm = () => {
     const { allUsers } = useSelector((state) => state.Users);
