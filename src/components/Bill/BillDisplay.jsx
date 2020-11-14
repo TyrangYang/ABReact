@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Dinero from 'dinero.js';
 import { useUserName } from '../../hooks/useUserName';
 
-import BillTableDisplay from './widget/BillTableDisplay';
+import BillTableDisplay from './BillTableDisplay';
 
 const BillDisplay = () => {
     const { allBills } = useSelector((state) => state.Bills);

@@ -17,7 +17,7 @@ const SummaryDisplay = ({ summary, merged }) => {
     const getNameById = useUserName();
     const dispatch = useDispatch();
 
-    const tableData = useMemo(() => {
+    const tableContent = useMemo(() => {
         if (merged) {
             return summary.map((e) => {
                 return [
@@ -55,12 +55,12 @@ const SummaryDisplay = ({ summary, merged }) => {
         <div>
             {merged ? (
                 <TableDisplay
-                    tableData={tableData}
+                    tableContent={tableContent}
                     headers={['Transform', 'Amount']}
                 />
             ) : (
                 <TableDisplay
-                    tableData={tableData}
+                    tableContent={tableContent}
                     headers={['Transform', 'Amount', '']}
                 />
             )}

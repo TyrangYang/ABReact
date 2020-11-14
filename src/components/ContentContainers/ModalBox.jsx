@@ -43,7 +43,7 @@ const ModalBox = (props) => {
 };
 
 ModalBox.propTypes = {
-    onClickBackground: PropTypes.func,
+    onClickBackground: PropTypes.func.isRequired,
     style: PropTypes.object,
 };
 

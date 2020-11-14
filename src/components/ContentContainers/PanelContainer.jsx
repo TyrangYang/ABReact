@@ -8,6 +8,7 @@ const PanelContainer = (props) => {
             style={{
                 margin: '10px',
                 padding: '10px',
+                overflow: 'auto',
                 ...props.style,
             }}
             data-testid="layoutContainerItem"

@@ -9,11 +9,10 @@ import {
     TableCell,
     TableBody,
 } from '@material-ui/core';
-const TableDisplay = (props) => {
-    const { headers, tableData } = props;
+const TableDisplay = ({ headers, tableContent }) => {
     return (
         <TableContainer component={Paper}>
-            <Table style={{ minWidth: '500px' }} aria-label="table">
+            <Table aria-label="table">
                 <TableHead>
                     <TableRow>
                         {headers.map((eachHead, idx) => (
@@ -24,7 +23,7 @@ const TableDisplay = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {tableData.map((row, idx) => (
+                    {tableContent.map((row, idx) => (
                         <TableRow key={idx}>
                             {row.map((e, i) => (
                                 <TableCell align="center" key={i}>
@@ -41,7 +40,7 @@ const TableDisplay = (props) => {
 
 TableDisplay.propTypes = {
     headers: PropTypes.array.isRequired,
-    tableData: PropTypes.array.isRequired,
+    tableContent: PropTypes.array.isRequired,
 };
 
 export default TableDisplay;

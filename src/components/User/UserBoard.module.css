@@ -6,12 +6,10 @@
     margin: 10px;
 }
 
-.unordered_list {
-    list-style: none;
-    padding-left: 0;
-}
-
 .addUserForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .formBtnGroup {

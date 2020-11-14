@@ -22,6 +22,7 @@ import { Add, Close } from '@material-ui/icons/';
 import Styles from './AddBillForm.module.css';
 import MultiLineSlider from './MultiLineSlider';
 import ModalBox from '../ContentContainers/ModalBox';
+import HoverHelpWidget from '../widgets/HoverHelpWidget';
 
 const AddBillForm = () => {
     const { allUsers } = useSelector((state) => state.Users);
@@ -38,7 +39,6 @@ const AddBillForm = () => {
 
     const [unevenlyRes, setUnevenlyRes] = useState([]);
 
-    // console.log(unevenlyRes);
     return (
         <div>
             <Button
@@ -62,7 +62,28 @@ const AddBillForm = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <h2>ADD NEW BILL</h2>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <h2>ADD NEW BILL </h2>
+                            <HoverHelpWidget
+                                messageOnHover={
+                                    <div>
+                                        <p>
+                                            Payer is who actual spend the money
+                                        </p>
+                                        <p>
+                                            Participant(s) are those split this
+                                            bill
+                                        </p>
+                                        <p>Do not forgot yourself</p>
+                                    </div>
+                                }
+                            />
+                        </div>
                         <IconButton
                             onClick={() => {
                                 setShowAddBillForm(false);
@@ -111,7 +132,7 @@ const AddBillForm = () => {
                     >
                         {/* payer */}
                         <FormControl error={!!errors.payer}>
-                            <InputLabel id="Payer_label"> Payer </InputLabel>
+                            <InputLabel id="Payer_label">Payer</InputLabel>
                             <Controller
                                 as={
                                     <Select labelId="Payer_label" value="">

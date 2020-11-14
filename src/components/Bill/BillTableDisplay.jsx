@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { useDispatch } from 'react-redux';
-import { removeBill } from '../../../slice/billSlice';
+import { removeBill } from '../../slice/billSlice';
 
 import {
     TableContainer,
@@ -14,7 +14,7 @@ import {
     TableBody,
 } from '@material-ui/core';
 
-import DeleteBtnConfirmModal from './DeleteBtnWithConfirmModal';
+import DeleteBtnConfirmModal from '../widgets/DeleteBtnWithConfirmModal';
 
 const OneTableRow = ({ rowData }) => {
     const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const OneTableRow = ({ rowData }) => {
                 <TableCell align="center">
                     <DeleteBtnConfirmModal
                         confirmMessage="123"
-                        onClickDeleteButton={() => {
+                        onClickConfirmDeleteButton={() => {
                             dispatch(removeBill(rowData.id));
                         }}
                     />
