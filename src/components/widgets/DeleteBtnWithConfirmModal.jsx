@@ -6,6 +6,7 @@ import { Button, IconButton, OutlinedInput } from '@material-ui/core';
 import { Delete, Close } from '@material-ui/icons';
 
 const DeleteBtnWithConfirmModal = ({
+    title = '',
     confirmMessage,
     onClickConfirmDeleteButton,
 }) => {
@@ -38,15 +39,27 @@ const DeleteBtnWithConfirmModal = ({
                         padding: '20px',
                     }}
                 >
-                    <IconButton
-                        onClick={() => closeModal()}
-                        style={{ alignSelf: 'flex-end' }}
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}
                     >
-                        <Close />
-                    </IconButton>
-                    <p style={{ margin: '10px 0' }}>
+                        <h2>{title}</h2>
+                        <IconButton
+                            onClick={() => closeModal()}
+                            // style={{ alignSelf: 'flex-end' }}
+                        >
+                            <Close />
+                        </IconButton>
+                    </div>
+                    <p style={{ margin: '10px 0', fontSize: '20px' }}>
                         Please type
-                        <span> {confirmMessage} </span>
+                        <span style={{ fontWeight: 'bold' }}>
+                            {' '}
+                            {confirmMessage}{' '}
+                        </span>
                         to confirm.
                     </p>
                     <OutlinedInput
@@ -77,6 +90,7 @@ const DeleteBtnWithConfirmModal = ({
 };
 
 DeleteBtnWithConfirmModal.propTypes = {
+    title: PropTypes.string,
     confirmMessage: PropTypes.string.isRequired,
     onClickConfirmDeleteButton: PropTypes.func.isRequired,
 };

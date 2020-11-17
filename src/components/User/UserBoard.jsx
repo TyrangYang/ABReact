@@ -1,22 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import { addUser, removeUser } from '../../slice/userSlice';
+import React, { useMemo, useRef, useEffect } from 'react';
+import { removeUser } from '../../slice/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { v4 as uuidV4 } from 'uuid';
-import { useForm } from 'react-hook-form';
+import { IconButton } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 
-import { Button, TextField, IconButton } from '@material-ui/core';
-import { Delete, Check, PersonAdd, Close } from '@material-ui/icons';
-
+import AddNewUser from './AddNewUser';
 import TableDisplay from '../ContentContainers/TableDisplay';
-import ModalBox from '../ContentContainers/ModalBox';
-import Styles from './UserBoard.module.css';
 
 function UserBoard() {
-    const [showAddUserForm, setShowAddUserForm] = useState(false);
-
     const { allUsers } = useSelector((state) => state.Users);
+    const { allBills } = useSelector((state) => state.Bills);
     const dispatch = useDispatch();
+
+    // solve snapshot problem
+    const billRef = useRef(allBills);
 
     const tableContent = useMemo(() => {
         return allUsers.map((e) => {
@@ -26,8 +24,17 @@ function UserBoard() {
                 <IconButton
                     color="secondary"
                     onClick={() => {
-                        if (window.confirm(`Do you want to delete ${name}`))
-                            dispatch(removeUser(id));
+                        // solve snapshot problem (allBills ==> ref.current)
+                        let userInBill = billRef.current.reduce((acc, cur) => {
+                            if (acc) return true;
+                            else
+                                return (
+                                    cur.payer === id ||
+                                    cur.participants.includes(id)
+                                );
+                        }, false);
+                        if (userInBill) alert('cannot delete');
+                        else dispatch(removeUser(id));
                     }}
                 >
                     <Delete />
@@ -36,84 +43,18 @@ function UserBoard() {
         });
     }, [allUsers, dispatch]);
 
-    const { register, handleSubmit, errors } = useForm();
+    // solve snapshot problem
+    useEffect(() => {
+        billRef.current = allBills;
+    });
+
     return (
         <div>
-            <Button
-                color="primary"
-                onClick={() => {
-                    setShowAddUserForm(true);
-                }}
-                startIcon={<PersonAdd />}
-            >
-                New User
-            </Button>
-            {showAddUserForm && (
-                <ModalBox
-                    onClickBackground={() => {
-                        setShowAddUserForm(false);
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <h2>ADD NEW USER</h2>
-                        <IconButton
-                            onClick={() => {
-                                setShowAddUserForm(false);
-                            }}
-                        >
-                            <Close />
-                        </IconButton>
-                    </div>
-                    <form
-                        className={Styles.addUserForm}
-                        onSubmit={handleSubmit((e) => {
-                            dispatch(
-                                addUser({
-                                    id: uuidV4(),
-                                    name: e.newName.toUpperCase(),
-                                })
-                            );
-                            setShowAddUserForm(false);
-                        })}
-                    >
-                        <TextField
-                            type="text"
-                            name="newName"
-                            placeholder="Enter a new name"
-                            inputRef={register({ required: true })}
-                            error={!!errors.newName}
-                            helperText={
-                                !!errors.newName ? 'Name is required' : ''
-                            }
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            endIcon={<Check />}
-                        >
-                            Confirm
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => setShowAddUserForm(false)}
-                        >
-                            cancel
-                        </Button>
-                    </form>
-                </ModalBox>
-            )}
+            <AddNewUser />
             {/* show user list */}
             <TableDisplay tableContent={tableContent} headers={['name', '']} />
         </div>
     );
 }
 
-export default React.memo(UserBoard);
+export default UserBoard;

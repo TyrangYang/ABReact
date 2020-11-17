@@ -27,6 +27,7 @@ const OneTableRow = ({ rowData }) => {
                 <TableCell align="center">{rowData.date}</TableCell>
                 <TableCell align="center">
                     <DeleteBtnConfirmModal
+                        title="Do you want Delete this Bill?"
                         confirmMessage="123"
                         onClickConfirmDeleteButton={() => {
                             dispatch(removeBill(rowData.id));
