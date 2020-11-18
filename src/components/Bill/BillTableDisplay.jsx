@@ -12,9 +12,31 @@ import {
     TableRow,
     TableCell,
     TableBody,
+    Chip,
 } from '@material-ui/core';
-
+import { makeStyles } from '@material-ui/core/styles';
 import DeleteBtnConfirmModal from '../widgets/DeleteBtnWithConfirmModal';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        '& > *': {
+            margin: theme.spacing(0.5),
+        },
+    },
+}));
+
+const ParticipantCell = ({ data }) => {
+    return (
+        <div className={useStyles().root}>
+            {data.map((e, idx) => (
+                <Chip key={idx} label={e} variant="outlined" color="primary" />
+            ))}
+        </div>
+    );
+};
 
 const OneTableRow = ({ rowData }) => {
     const dispatch = useDispatch();
@@ -23,7 +45,9 @@ const OneTableRow = ({ rowData }) => {
             <TableRow data-testid="billItem">
                 <TableCell align="center">{rowData.payer}</TableCell>
                 <TableCell align="center">{rowData.amount}</TableCell>
-                <TableCell align="center">{rowData.participants}</TableCell>
+                <TableCell align="center" style={{ width: '40%' }}>
+                    <ParticipantCell data={rowData.participants} />
+                </TableCell>
                 <TableCell align="center">{rowData.date}</TableCell>
                 <TableCell align="center">
                     <DeleteBtnConfirmModal
@@ -60,6 +84,10 @@ const BillTableDisplay = ({ tableData }) => {
             </Table>
         </TableContainer>
     );
+};
+
+ParticipantCell.prototype = {
+    data: PropTypes.array.isRequired,
 };
 
 OneTableRow.propTypes = {

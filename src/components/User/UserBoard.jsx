@@ -34,7 +34,10 @@ function UserBoard() {
                                 );
                         }, false);
                         if (userInBill) alert('cannot delete');
-                        else dispatch(removeUser(id));
+                        else {
+                            if (window.confirm('Want delete this user?'))
+                                dispatch(removeUser(id));
+                        }
                     }}
                 >
                     <Delete />

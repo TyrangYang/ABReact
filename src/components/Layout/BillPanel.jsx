@@ -4,13 +4,12 @@ import BillDisplay from '../Bill/BillDisplay';
 import SummaryBoard from '../Summary/SummaryBoard';
 import PanelContainer from '../ContentContainers/PanelContainer';
 
-import { Tabs, Tab, Switch } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
 
 import PieChart from '../Summary/Charts/UserMoneyStatusPieChart';
 import useSummary from '../../hooks/useSummary';
 
 export default function BillPanel() {
-    const [showChart, setShowChart] = useState(false);
     const [, payerList, receiverList] = useSummary();
 
     const [tabIdx, setTabIdx] = useState(0);
@@ -45,20 +44,10 @@ export default function BillPanel() {
             </div>
             {tabIdx === 2 && (
                 <div>
-                    <Switch
-                        checked={showChart}
-                        onChange={(e) => {
-                            setShowChart(e.target.checked);
-                        }}
-                        color="primary"
-                        name="show-chart"
+                    <PieChart
+                        payerList={payerList}
+                        receiverList={receiverList}
                     />
-                    {showChart && (
-                        <PieChart
-                            payerList={payerList}
-                            receiverList={receiverList}
-                        />
-                    )}
                 </div>
             )}
         </PanelContainer>
