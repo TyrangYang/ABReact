@@ -33,7 +33,8 @@ function UserBoard() {
                                     cur.participants.includes(id)
                                 );
                         }, false);
-                        if (userInBill) alert('cannot delete');
+                        if (userInBill)
+                            alert('User still in a BILL. Cannot delete');
                         else {
                             if (window.confirm('Want delete this user?'))
                                 dispatch(removeUser(id));
@@ -55,7 +56,14 @@ function UserBoard() {
         <div>
             <AddNewUser />
             {/* show user list */}
-            <TableDisplay tableContent={tableContent} headers={['name', '']} />
+            {tableContent.length !== 0 ? (
+                <TableDisplay
+                    tableContent={tableContent}
+                    headers={['name', '']}
+                />
+            ) : (
+                <h2>no user</h2>
+            )}
         </div>
     );
 }

@@ -53,16 +53,22 @@ const SummaryDisplay = ({ summary, merged }) => {
 
     return (
         <div>
-            {merged ? (
-                <TableDisplay
-                    tableContent={tableContent}
-                    headers={['Transform', 'Amount']}
-                />
+            {tableContent.length !== 0 ? (
+                <>
+                    {merged ? (
+                        <TableDisplay
+                            tableContent={tableContent}
+                            headers={['Transform', 'Amount']}
+                        />
+                    ) : (
+                        <TableDisplay
+                            tableContent={tableContent}
+                            headers={['Transform', 'Amount', '']}
+                        />
+                    )}
+                </>
             ) : (
-                <TableDisplay
-                    tableContent={tableContent}
-                    headers={['Transform', 'Amount', '']}
-                />
+                <h2> Bill All Set </h2>
             )}
         </div>
     );

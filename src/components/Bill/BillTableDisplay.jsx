@@ -63,7 +63,7 @@ const OneTableRow = ({ rowData }) => {
     );
 };
 
-const BillTableDisplay = ({ tableData }) => {
+const BillTableDisplay = ({ tableContent }) => {
     return (
         <TableContainer component={Paper}>
             <Table style={{ minWidth: '500px' }} aria-label="bill-table">
@@ -77,7 +77,7 @@ const BillTableDisplay = ({ tableData }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {tableData.map((row, idx) => (
+                    {tableContent.map((row, idx) => (
                         <OneTableRow rowData={row} key={idx}></OneTableRow>
                     ))}
                 </TableBody>
@@ -95,7 +95,7 @@ OneTableRow.propTypes = {
 };
 
 BillTableDisplay.propTypes = {
-    tableData: PropTypes.array.isRequired,
+    tableContent: PropTypes.array.isRequired,
 };
 
 export default React.memo(BillTableDisplay);
