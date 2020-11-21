@@ -54,7 +54,15 @@ function UserBoard() {
 
     return (
         <div>
-            <AddNewUser />
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginBottom: '10px',
+                }}
+            >
+                <AddNewUser />
+            </div>
             {/* show user list */}
             {tableContent.length !== 0 ? (
                 <TableDisplay

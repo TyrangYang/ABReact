@@ -6,7 +6,7 @@ import SummaryDisplay from './SummaryDisplay';
 import { TextField, MenuItem, Checkbox } from '@material-ui/core';
 import styles from './SummaryBoard.module.css';
 
-import useSummary from '../../hooks/useSummary';
+import useSummary from '../../hooks/useBillSummary';
 
 // compose(f1, f2, f3)(val) === f3(f2(f1(val)))
 const compose = (...fn) =>

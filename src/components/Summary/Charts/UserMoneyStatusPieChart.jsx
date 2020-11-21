@@ -105,7 +105,12 @@ const UserMoneyStatusPieChart = ({ payerList, receiverList }) => {
         };
     }, [payerList, receiverList, getNameById]);
 
-    if (payerList.length === 0 || receiverList.length === 0) return <div></div>;
+    if (payerList.length === 0 || receiverList.length === 0)
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <h2>Empty Data</h2>
+            </div>
+        );
 
     return (
         <div data-testid="pieChart">

@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderHook } from '@testing-library/react-hooks';
 import SummaryBoard from '../components/Summary/SummaryBoard';
-import useSummary from '../hooks/useSummary';
+import useSummary from '../hooks/useBillSummary';
 
 import { Provider } from 'react-redux';
 import store from '../app/store';

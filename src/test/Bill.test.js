@@ -42,6 +42,8 @@ it('Invalid empty input', async () => {
 });
 
 test('Add new bill', async () => {
+    // original length
+    const oriLen = screen.queryAllByTestId('billItem').length;
     // open form
     userEvent.click(screen.getByTestId('add-new-bill-btn'));
 
@@ -69,5 +71,5 @@ test('Add new bill', async () => {
     });
     // screen.debug();
     // add a new one
-    expect(screen.getAllByTestId('billItem')).toHaveLength(7);
+    expect(screen.getAllByTestId('billItem')).toHaveLength(oriLen + 1);
 });

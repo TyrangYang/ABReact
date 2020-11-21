@@ -68,7 +68,9 @@ const SummaryDisplay = ({ summary, merged }) => {
                     )}
                 </>
             ) : (
-                <h2> Bill All Set </h2>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <h2> Bill All Set </h2>
+                </div>
             )}
         </div>
     );

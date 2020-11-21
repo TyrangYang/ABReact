@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addBill } from '../../slice/billSlice';
 
@@ -29,14 +29,7 @@ const AddBillForm = () => {
 
     const dispatch = useDispatch();
 
-    const {
-        handleSubmit,
-        register,
-        watch,
-        errors,
-        control,
-        unregister,
-    } = useForm();
+    const { handleSubmit, register, watch, errors, control } = useForm();
 
     const [showAddBillForm, setShowAddBillForm] = useState(false);
 
@@ -45,12 +38,6 @@ const AddBillForm = () => {
     const formAmount = watch('amount', 0);
 
     const [unevenlyRes, setUnevenlyRes] = useState([]);
-
-    // useEffect(() => {
-    //     return () => {
-    //         unregister();
-    //     };
-    // });
 
     return (
         <div>

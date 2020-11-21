@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import Dinero from 'dinero.js';
 
-const useSummary = () => {
+const useBillSummary = () => {
     const { allBills } = useSelector((state) => state.Bills);
     const summary = useMemo(() => {
         let m = new Map();
@@ -99,4 +99,4 @@ const useSummary = () => {
     return [summary, payerList, receiverList];
 };
 
-export default useSummary;
+export default useBillSummary;

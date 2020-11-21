@@ -6,12 +6,9 @@ import PanelContainer from '../ContentContainers/PanelContainer';
 
 import { Tabs, Tab } from '@material-ui/core';
 
-import PieChart from '../Summary/Charts/UserMoneyStatusPieChart';
-import useSummary from '../../hooks/useSummary';
+import SummaryChartsPanel from '../Summary/SummaryChartsPanel';
 
 export default function BillPanel() {
-    const [, payerList, receiverList] = useSummary();
-
     const [tabIdx, setTabIdx] = useState(0);
 
     return (
@@ -44,10 +41,7 @@ export default function BillPanel() {
             </div>
             {tabIdx === 2 && (
                 <div>
-                    <PieChart
-                        payerList={payerList}
-                        receiverList={receiverList}
-                    />
+                    <SummaryChartsPanel />
                 </div>
             )}
         </PanelContainer>

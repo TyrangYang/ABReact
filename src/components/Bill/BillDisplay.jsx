@@ -5,7 +5,6 @@ import Dinero from 'dinero.js';
 import { useUserName } from '../../hooks/useUserName';
 
 import BillTableDisplay from './BillTableDisplay';
-import AddBillForm from './AddBillForm';
 
 const BillDisplay = () => {
     const { allBills } = useSelector((state) => state.Bills);
@@ -28,10 +27,9 @@ const BillDisplay = () => {
             {tableContent.length !== 0 ? (
                 <BillTableDisplay tableContent={tableContent} />
             ) : (
-                <>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <h2>Add new Bill</h2>
-                    <AddBillForm />
-                </>
+                </div>
             )}
         </div>
     );
