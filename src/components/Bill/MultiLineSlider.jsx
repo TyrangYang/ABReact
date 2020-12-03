@@ -20,38 +20,24 @@ const throttle = (fn, delay) => {
 function MultiLineSlider({ formParticipants, totalAmount, outGoingRes }) {
     const getUserById = useUserName();
 
-    const total = Dinero({
-        amount: +totalAmount * 100,
-        currency: 'USD',
-        precision: 2,
+    const [inputValues, setInputValues] = useState([]);
+
+    useEffect(() => {
+        outGoingRes(inputValues);
     });
 
-    const [prevParticipantsNum, setPrevParticipantsNum] = useState(0);
-
-    const [prevTotalAmount, setPrevTotalAmount] = useState(-10);
-
-    const [inputValues, setInputValues] = useState(
-        total
-            .allocate(new Array(formParticipants.length).fill(1))
-            .map((e) => e.toJSON().amount / 10 ** total.getPrecision())
-    );
-
-    if (
-        prevParticipantsNum !== formParticipants.length ||
-        prevTotalAmount !== totalAmount
-    ) {
+    useEffect(() => {
+        const total = Dinero({
+            amount: +totalAmount * 100,
+            currency: 'USD',
+            precision: 2,
+        });
         setInputValues(
             total
                 .allocate(new Array(formParticipants.length).fill(1))
                 .map((e) => e.toJSON().amount / 10 ** total.getPrecision())
         );
-        setPrevParticipantsNum(formParticipants.length);
-        setPrevTotalAmount(totalAmount);
-    }
-
-    useEffect(() => {
-        outGoingRes(inputValues);
-    });
+    }, [formParticipants, totalAmount]);
 
     const balanceSplitAmount = (changingIdx, newVal) => {
         let diff =
@@ -86,7 +72,11 @@ function MultiLineSlider({ formParticipants, totalAmount, outGoingRes }) {
             );
         }
     };
-
+    if (
+        inputValues.length === 0 ||
+        inputValues.length !== formParticipants.length
+    )
+        return;
     return (
         <Grid container direction="column" style={{ alignItems: 'center' }}>
             {formParticipants.map((eachParticipants, idx) => (

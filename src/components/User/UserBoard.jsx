@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useEffect } from 'react';
 import { removeUser } from '../../slice/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IconButton } from '@material-ui/core';
+import { IconButton, Avatar } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 
 import AddNewUser from './AddNewUser';
@@ -20,7 +20,16 @@ function UserBoard() {
         return allUsers.map((e) => {
             let { id, name } = e;
             return [
-                name,
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Avatar alt={name[0]} src="will be change" />
+                    <span>{name}</span>
+                </div>,
                 <IconButton
                     color="secondary"
                     onClick={() => {

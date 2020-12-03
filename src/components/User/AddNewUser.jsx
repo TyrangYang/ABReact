@@ -28,7 +28,7 @@ const AddNewUser = () => {
                 }}
                 startIcon={<PersonAdd />}
             >
-                New User
+                Add New Person
             </Button>
             {showAddUserForm && (
                 <ModalBox
