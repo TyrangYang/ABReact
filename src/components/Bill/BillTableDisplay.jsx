@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { useDispatch } from 'react-redux';
 import { removeBill } from '../../slice/billSlice';
+import { WarningContext } from './BillDisplay';
 
 import {
     TableContainer,
@@ -40,6 +41,8 @@ const ParticipantCell = ({ data }) => {
 
 const OneTableRow = ({ rowData }) => {
     const dispatch = useDispatch();
+    const { setShowDeleteWarning } = useContext(WarningContext);
+
     return (
         <>
             <TableRow data-testid="billItem">
@@ -55,6 +58,7 @@ const OneTableRow = ({ rowData }) => {
                         confirmMessage="123"
                         onClickConfirmDeleteButton={() => {
                             dispatch(removeBill(rowData.id));
+                            setShowDeleteWarning(true);
                         }}
                     />
                 </TableCell>

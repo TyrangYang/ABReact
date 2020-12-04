@@ -57,8 +57,7 @@ const DeleteBtnWithConfirmModal = ({
                     <p style={{ margin: '10px 0', fontSize: '20px' }}>
                         Please type
                         <span style={{ fontWeight: 'bold' }}>
-                            {' '}
-                            {confirmMessage}{' '}
+                            {' ' + confirmMessage + ' '}
                         </span>
                         to confirm.
                     </p>
