@@ -76,7 +76,7 @@ const SummaryDisplay = ({ summary, merged }) => {
     );
 };
 
-SummaryDisplay.prototype = {
+SummaryDisplay.propTypes = {
     summary: PropTypes.array,
     merged: PropTypes.bool,
 };
