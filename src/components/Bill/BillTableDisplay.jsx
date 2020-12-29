@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { useDispatch } from 'react-redux';
 import { removeBill } from '../../slice/billSlice';
-import { WarningContext } from './BillDisplay';
 
 import {
     TableContainer,
@@ -39,9 +38,8 @@ const ParticipantCell = ({ data }) => {
     );
 };
 
-const OneTableRow = ({ rowData }) => {
+const OneTableRow = ({ rowData, setShowDelConfirmSnackbar }) => {
     const dispatch = useDispatch();
-    const { setShowDeleteWarning } = useContext(WarningContext);
 
     return (
         <>
@@ -58,7 +56,7 @@ const OneTableRow = ({ rowData }) => {
                         confirmMessage="123"
                         onClickConfirmDeleteButton={() => {
                             dispatch(removeBill(rowData.id));
-                            setShowDeleteWarning(true);
+                            setShowDelConfirmSnackbar(true);
                         }}
                     />
                 </TableCell>
@@ -67,7 +65,7 @@ const OneTableRow = ({ rowData }) => {
     );
 };
 
-const BillTableDisplay = ({ tableContent }) => {
+const BillTableDisplay = ({ tableContent, setShowDelConfirmSnackbar }) => {
     return (
         <TableContainer component={Paper}>
             <Table style={{ minWidth: '500px' }} aria-label="bill-table">
@@ -82,7 +80,13 @@ const BillTableDisplay = ({ tableContent }) => {
                 </TableHead>
                 <TableBody>
                     {tableContent.map((row, idx) => (
-                        <OneTableRow rowData={row} key={idx}></OneTableRow>
+                        <OneTableRow
+                            rowData={row}
+                            key={idx}
+                            setShowDelConfirmSnackbar={
+                                setShowDelConfirmSnackbar
+                            }
+                        ></OneTableRow>
                     ))}
                 </TableBody>
             </Table>
@@ -90,7 +94,7 @@ const BillTableDisplay = ({ tableContent }) => {
     );
 };
 
-ParticipantCell.prototype = {
+ParticipantCell.propTypes = {
     data: PropTypes.array.isRequired,
 };
 
