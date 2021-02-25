@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const billSlice = createSlice({
-    name: 'billSlice',
-    initialState: {
-        allBills: [
+export const fetchAllBills = createAsyncThunk(
+    'billSlice/fetchAllBills',
+    async (_, thunkAPI) => {
+        let response = [
             {
                 id: 'bill1',
                 payer: 'userId1',
@@ -58,7 +58,15 @@ const billSlice = createSlice({
                 date: '2019-12-05',
                 description: '',
             },
-        ],
+        ];
+        return response;
+    }
+);
+const billSlice = createSlice({
+    name: 'billSlice',
+    initialState: {
+        allBills: [],
+        loading: false,
     },
 
     reducers: {
@@ -84,6 +92,18 @@ const billSlice = createSlice({
                         : action.payload.newData;
                 }),
             };
+        },
+    },
+    extraReducers: {
+        [fetchAllBills.pending]: (state, action) => {
+            console.log('pending', action.type);
+        },
+        [fetchAllBills.rejected]: (state, action) => {
+            console.log('rejected', action.type);
+        },
+        [fetchAllBills.fulfilled]: (state, action) => {
+            console.log('fulfilled');
+            state.allBills.push(...action.payload);
         },
     },
 });
