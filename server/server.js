@@ -47,7 +47,7 @@ const resolvers = {
     },
 
     Bill: {
-        participants: async (parent) => {
+        participants: (parent) => {
             return parent.participantsId.map(async (userId) => {
                 let { data } = await axios.get(
                     `http://localhost:3004/allUsers/${userId}`
