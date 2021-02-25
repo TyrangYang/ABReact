@@ -1,0 +1,56 @@
+{
+    "name": "ABReact front-end",
+    "version": "0.1.0",
+    "homepage": ".",
+    "private": true,
+    "dependencies": {
+        "@material-ui/core": "^4.11.0",
+        "@material-ui/icons": "^4.9.1",
+        "@react-pdf/renderer": "^1.6.12",
+        "@reduxjs/toolkit": "^1.5.0",
+        "@testing-library/user-event": "^7.2.1",
+        "chart.js": "^2.9.4",
+        "dinero.js": "^1.8.1",
+        "moment": "^2.29.1",
+        "react": "^16.14.0",
+        "react-chartjs-2": "^2.10.0",
+        "react-dom": "^16.14.0",
+        "react-hook-form": "^6.10.1",
+        "react-redux": "^7.2.2",
+        "react-scripts": "^4.0.3",
+        "uuid": "^8.3.1"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "predeploy": "npm run build",
+        "deploy": "npx gh-pages -d build",
+        "postdeploy": "rm -rf build",
+        "clean": "rm -rf build node_modules"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^11.1.1",
+        "@testing-library/react-hooks": "^3.4.2",
+        "jest-canvas-mock": "^2.3.0",
+        "mutationobserver-shim": "^0.3.7",
+        "react-test-renderer": "^17.0.1"
+    }
+}

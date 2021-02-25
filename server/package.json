@@ -1,0 +1,25 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "clean": "rm -rf node_modules",
+        "dev": "concurrently 'npm run rest-server' 'nodemon server.js'",
+        "rest-server": "json-server --watch db.json --port 3004"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "apollo-server-express": "^2.21.0",
+        "axios": "^0.21.1",
+        "express": "^4.17.1",
+        "graphql": "^15.5.0"
+    },
+    "devDependencies": {
+        "concurrently": "^6.0.0",
+        "json-server": "^0.16.2",
+        "nodemon": "^2.0.7"
+    }
+}
