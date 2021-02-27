@@ -1,60 +1,95 @@
 {
-    "allBills": [
+    "event": [
         {
-            "id": "bill1",
-            "payer": "userId1",
-            "amount": { "amount": 10000, "currency": "USD", "precision": 2 },
-            "participantsId": ["userId1", "userId2"],
-            "date": "2020-04-20"
-        },
-        {
-            "id": "bill2",
-            "payer": "userId2",
-            "amount": { "amount": 40000, "currency": "USD", "precision": 2 },
-            "participantsId": ["userId1", "userId2", "userId3"],
-            "date": "2020-01-01"
-        },
-        {
-            "id": "bill3",
-            "payer": "userId3",
-            "amount": { "amount": 50030, "currency": "USD", "precision": 2 },
-            "participantsId": ["userId3", "userId2"],
-            "date": "2020-02-05"
-        },
-        {
-            "id": "bill4",
-            "payer": "userId4",
-            "amount": { "amount": 20045, "currency": "USD", "precision": 2 },
-            "participantsId": ["userId1", "userId5"],
-            "date": "2020-02-09"
-        },
-        {
-            "id": "bill5",
-            "payer": "userId2",
-            "amount": { "amount": 10072, "currency": "USD", "precision": 2 },
-            "participantsId": ["userId5"],
-            "date": "2019-12-05"
-        },
-        {
-            "id": "bill6",
-            "payer": "userId3",
-            "amount": { "amount": 7063, "currency": "USD", "precision": 2 },
-            "participantsId": [
-                "userId1",
-                "userId2",
-                "userId3",
-                "userId4",
-                "userId5"
+            "id": "event1",
+            "eventOwnerId": "owner-1",
+            "eventCreateDate": "2010-01-01",
+            "allBills": [
+                {
+                    "id": "bill1",
+                    "payer": "involverID1",
+                    "amount": {
+                        "amount": 10000,
+                        "currency": "USD",
+                        "precision": 2
+                    },
+                    "participantsId": ["involverID1", "involverID2"],
+                    "date": "2020-04-20"
+                },
+                {
+                    "id": "bill2",
+                    "payer": "involverID2",
+                    "amount": {
+                        "amount": 40000,
+                        "currency": "USD",
+                        "precision": 2
+                    },
+                    "participantsId": [
+                        "involverID1",
+                        "involverID2",
+                        "involverID3"
+                    ],
+                    "date": "2020-01-01"
+                },
+                {
+                    "id": "bill3",
+                    "payer": "involverID3",
+                    "amount": {
+                        "amount": 50030,
+                        "currency": "USD",
+                        "precision": 2
+                    },
+                    "participantsId": ["involverID3", "involverID2"],
+                    "date": "2020-02-05"
+                },
+                {
+                    "id": "bill4",
+                    "payer": "involverID4",
+                    "amount": {
+                        "amount": 20045,
+                        "currency": "USD",
+                        "precision": 2
+                    },
+                    "participantsId": ["involverID1", "involverID5"],
+                    "date": "2020-02-09"
+                },
+                {
+                    "id": "bill5",
+                    "payer": "involverID2",
+                    "amount": {
+                        "amount": 10072,
+                        "currency": "USD",
+                        "precision": 2
+                    },
+                    "participantsId": ["involverID5"],
+                    "date": "2019-12-05"
+                },
+                {
+                    "id": "bill6",
+                    "payer": "involverID3",
+                    "amount": {
+                        "amount": 7063,
+                        "currency": "USD",
+                        "precision": 2
+                    },
+                    "participantsId": [
+                        "involverID1",
+                        "involverID2",
+                        "involverID3",
+                        "involverID4",
+                        "involverID5"
+                    ],
+                    "date": "2019-12-05"
+                }
             ],
-            "date": "2019-12-05"
+            "allInvolvers": [
+                { "id": "involverID1", "name": "TEST_NAME1" },
+                { "id": "involverID2", "name": "TEST_NAME2" },
+                { "id": "involverID3", "name": "TEST_NAME3" },
+                { "id": "involverID4", "name": "TEST_NAME4" },
+                { "id": "involverID5", "name": "TEST_NAME5" },
+                { "id": "involverID6", "name": "TEST_NAME6" }
+            ]
         }
-    ],
-    "allUsers": [
-        { "id": "userId1", "name": "TEST_NAME1" },
-        { "id": "userId2", "name": "TEST_NAME2" },
-        { "id": "userId3", "name": "TEST_NAME3" },
-        { "id": "userId4", "name": "TEST_NAME4" },
-        { "id": "userId5", "name": "TEST_NAME5" },
-        { "id": "userId6", "name": "TEST_NAME6" }
     ]
 }
