@@ -3,13 +3,10 @@ const mongoose = require('mongoose');
 
 module.exports = () => {
     console.log('----database connection running----');
-    mongoose.connect(
-        'mongodb+srv://admin-1:uUxgwyFXzOU570hh@cluster-test.uwpz5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        }
-    );
+    mongoose.connect(databaseConfig.uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
 
     const db = mongoose.connection;
     db.once('open', () => {

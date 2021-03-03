@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "clean": "rm -rf node_modules",
-        "dev": "concurrently 'npm run rest-server' 'nodemon server.js'",
+        "dev": "concurrently 'nodemon server.js'",
         "rest-server": "json-server --watch db.json --port 3004"
     },
     "keywords": [],
@@ -16,6 +16,7 @@
         "axios": "^0.21.1",
         "express": "^4.17.1",
         "graphql": "^15.5.0",
+        "moment": "^2.29.1",
         "mongoose": "^5.11.18"
     },
     "devDependencies": {
