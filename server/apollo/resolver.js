@@ -11,16 +11,26 @@ const moment = require('moment');
 
 module.exports = {
     Query: {
+        getUserInfoByID: async (parent, { userID }) => {
+            return await userModel.findById(userID);
+        },
+        getEventInfoByID: async (parent, { eventID }) => {
+            return await eventModel.findById(eventID);
+        },
         getAllUsers: async (parent, args) => {
+            // XXX: will removes
             return await userModel.find();
         },
         getAllEvents: async (parent, args) => {
+            // XXX: will removes
             return await eventModel.find();
         },
         getAllInvolver: async (parent, args) => {
+            // XXX: will removes
             return await involverModel.find();
         },
         getAllBill: async (parent, args) => {
+            // XXX: will removes
             return await billModel.find();
         },
     },
@@ -38,7 +48,6 @@ module.exports = {
     },
     Bill: {
         payer: async (parent, args) => {
-            console.log(parent.payerID);
             return await involverModel.findById(parent.payerID);
         },
         participants: async (parent, args) => {
@@ -121,12 +130,13 @@ module.exports = {
                 { _id: involverID },
                 { $push: { joinedEventIDs: eventID } }
             );
+            if (!res1.nModified) return false;
             let res2 = await eventModel.updateOne(
                 { _id: eventID },
                 { $push: { allInvolverIDs: involverID } }
             );
-            console.log(res1, res2);
-            return res1.nModified && res2.nModified;
+            if (!res2.nModified) return false;
+            return true;
         },
 
         addNewBillToEvent: async (parent, args) => {
@@ -145,6 +155,23 @@ module.exports = {
             );
 
             return await newBill.save();
+        },
+
+        removeBillFromEvent: async (parent, args) => {
+            let { eventID, billID } = args;
+            let { nModified } = await eventModel.updateOne(
+                { _id: eventID },
+                { $pull: { allBillIDs: billID } }
+            );
+            if (!nModified) return false;
+            let { deletedCount } = await billModel.deleteOne({ _id: billID });
+            if (!deletedCount) return false;
+            return true;
+        },
+
+        involverLeaveEvent: async (parent, args) => {
+            let { eventID, involverID } = args;
+            // check all bills
         },
 
         // removeEvent: async (parent, args) => {

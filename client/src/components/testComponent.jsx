@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import moment from 'moment';
-import { v4 as uuidV4 } from 'uuid';
 
 import {
     Fab,
@@ -14,12 +11,8 @@ import {
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
-import { addBill } from '../slice/billSlice';
-import { addUser } from '../slice/userSlice';
-
 const TestComponent = () => {
     const [showComponent, setShowComponent] = useState(false);
-    const dispatch = useDispatch();
     return (
         <>
             <Fab
@@ -43,41 +36,35 @@ const TestComponent = () => {
                         <ListItem
                             button
                             onClick={() => {
-                                dispatch(
-                                    addBill({
-                                        id: uuidV4(),
-                                        payer: 'userId1',
-                                        amount: {
-                                            amount: 10000,
-                                            currency: 'USD',
-                                            precision: 2,
-                                        },
-                                        participants: ['userId2', 'userId3'],
-                                        date: moment().format('YYYY-MM-DD'),
-                                    })
-                                );
+                                // TODO
                             }}
                         >
                             <ListItemIcon>
                                 <Add />
                             </ListItemIcon>
-                            <ListItemText primary=" Test (add a bill)" />
+                            <ListItemText primary=" Initialize data" />
                         </ListItem>
                         <ListItem
                             button
                             onClick={() => {
-                                dispatch(
-                                    addUser({
-                                        id: uuidV4(),
-                                        name: 'User' + Math.random(),
-                                    })
-                                );
+                                // TODO
                             }}
                         >
                             <ListItemIcon>
                                 <Add />
                             </ListItemIcon>
                             <ListItemText primary=" Test (add a user)" />
+                        </ListItem>
+                        <ListItem
+                            button
+                            onClick={() => {
+                                // TODO
+                            }}
+                        >
+                            <ListItemIcon>
+                                <Add />
+                            </ListItemIcon>
+                            <ListItemText primary=" Test (add a bill)" />
                         </ListItem>
                     </List>
                 </Drawer>

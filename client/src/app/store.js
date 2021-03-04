@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import billReducer from '../slice/billSlice';
 import userReducer from '../slice/userSlice';
+import eventReducer from '../slice/eventSlice';
 
 export default configureStore({
     reducer: {
-        Users: userReducer,
-        Bills: billReducer,
+        User: userReducer,
+        Event: eventReducer,
     },
 });

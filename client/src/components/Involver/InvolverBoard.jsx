@@ -1,23 +1,35 @@
-import React, { useMemo, useRef, useEffect } from 'react';
-import { removeUser } from '../../slice/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import { IconButton, Avatar } from '@material-ui/core';
+import { IconButton, Avatar, CircularProgress } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 
-import AddNewUser from './AddNewUser';
+import { useQuery } from '@apollo/client';
+import { GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID } from '../../queries';
+
+import AddNewInvolver from './AddNewInvolver';
 import TableDisplay from '../ContentContainers/TableDisplay';
 
-function UserBoard() {
-    const { allUsers } = useSelector((state) => state.Users);
-    const { allBills } = useSelector((state) => state.Bills);
-    const dispatch = useDispatch();
+function InvolverBoard() {
+    const { currentEventID } = useSelector((state) => state.Event);
+    const { data, loading, error } = useQuery(
+        GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
+        {
+            variables: { eventID: currentEventID },
+        }
+    );
 
+    const [allInvolvers, setAllInvolvers] = useState([]);
+
+    useEffect(() => {
+        if (loading === false)
+            setAllInvolvers(data.getEventInfoByID.allInvolvers);
+    }, [loading, data]);
     // solve snapshot problem
-    const billRef = useRef(allBills);
+    // const billRef = useRef(allBills);
 
     const tableContent = useMemo(() => {
-        return allUsers.map((e) => {
+        return allInvolvers.map((e) => {
             let { id, name } = e;
             return [
                 <div
@@ -34,33 +46,34 @@ function UserBoard() {
                     color="secondary"
                     onClick={() => {
                         // solve snapshot problem (allBills ==> ref.current)
-                        let userInBill = billRef.current.reduce((acc, cur) => {
-                            if (acc) return true;
-                            else
-                                return (
-                                    cur.payer === id ||
-                                    cur.participants.includes(id)
-                                );
-                        }, false);
-                        if (userInBill)
-                            alert('User still in a BILL. Cannot delete');
-                        else {
-                            if (window.confirm('Want delete this user?'))
-                                dispatch(removeUser(id));
-                        }
                     }}
                 >
                     <Delete />
                 </IconButton>,
             ];
         });
-    }, [allUsers, dispatch]);
+    }, [allInvolvers]);
 
     // solve snapshot problem
-    useEffect(() => {
-        billRef.current = allBills;
-    });
-
+    // useEffect(() => {
+    //     billRef.current = allBills;
+    // });
+    if (error) {
+        return (
+            <div>
+                <h2>Error happen!! Please waite</h2>
+                {error}
+            </div>
+        );
+    }
+    if (loading) {
+        return (
+            <div>
+                <h2>Loading</h2>
+                <CircularProgress color="primary" />
+            </div>
+        );
+    }
     return (
         <div>
             <div
@@ -70,7 +83,7 @@ function UserBoard() {
                     marginBottom: '10px',
                 }}
             >
-                <AddNewUser />
+                <AddNewInvolver />
             </div>
             {/* show user list */}
             {tableContent.length !== 0 ? (
@@ -79,10 +92,10 @@ function UserBoard() {
                     headers={['name', '']}
                 />
             ) : (
-                <h2>no user</h2>
+                <h2>no Involver</h2>
             )}
         </div>
     );
 }
 
-export default UserBoard;
+export default InvolverBoard;

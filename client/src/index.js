@@ -4,21 +4,21 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import store from './app/store';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 
-// ReactDOM.render(
-//     <React.StrictMode>
-//         <Provider store={store}>
-//             <App />
-//         </Provider>
-//     </React.StrictMode>,
-//     document.getElementById('root')
-// );
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+const APOLLO_SERVER_URI = 'http://localhost:4000/graphql';
+const client = new ApolloClient({
+    uri: APOLLO_SERVER_URI,
+    cache: new InMemoryCache(),
+});
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+    <ApolloProvider client={client}>
+        <ReduxProvider store={store}>
+            <App />
+        </ReduxProvider>
+    </ApolloProvider>,
     document.getElementById('root')
 );
 

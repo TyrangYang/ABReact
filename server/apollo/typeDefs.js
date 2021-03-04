@@ -53,6 +53,8 @@ module.exports = gql`
         getAllEvents: [Event]
         getAllInvolver: [Involver]
         getAllBill: [Bill]
+        getUserInfoByID(userID: ID!): User
+        getEventInfoByID(eventID: ID!): Event
     }
 
     input CurrencyObject {
@@ -78,8 +80,7 @@ module.exports = gql`
             date: String
         ): Bill
 
-        removeEvent(eventID: ID!): Event
         removeBillFromEvent(eventID: ID!, billID: ID!): Boolean
-        removeInvolverFromEvent(eventID: ID!, involverID: ID!): Boolean
+        involverLeaveEvent(eventID: ID!, involverID: ID!): Boolean
     }
 `;
