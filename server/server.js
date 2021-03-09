@@ -1,5 +1,5 @@
 const express = require('express');
-const databaseConnect = require('./database/connect');
+const { connect: databaseConnect } = require('./database/dbConnection');
 const { server } = require('./apollo');
 
 /* set up apollo server */

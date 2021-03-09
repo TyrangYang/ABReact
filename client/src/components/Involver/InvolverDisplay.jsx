@@ -1,5 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useMemo, useContext, useRef } from 'react';
 
 import { IconButton, Avatar, CircularProgress } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
@@ -7,11 +6,15 @@ import { Delete } from '@material-ui/icons';
 import { useQuery } from '@apollo/client';
 import { GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID } from '../../queries';
 
-import AddNewInvolver from './AddNewInvolver';
+import { eventStore } from '../Event/EventContextProvider';
+
 import TableDisplay from '../ContentContainers/TableDisplay';
 
-function InvolverBoard() {
-    const { currentEventID } = useSelector((state) => state.Event);
+function InvolverDisplay() {
+    const {
+        state: { currentEventID },
+    } = useContext(eventStore);
+
     const { data, loading, error } = useQuery(
         GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
         {
@@ -19,12 +22,10 @@ function InvolverBoard() {
         }
     );
 
-    const [allInvolvers, setAllInvolvers] = useState([]);
-
-    useEffect(() => {
-        if (loading === false)
-            setAllInvolvers(data.getEventInfoByID.allInvolvers);
-    }, [loading, data]);
+    const allInvolvers = useMemo(() => {
+        if (loading || error) return [];
+        else return data?.getInvolversInEvent;
+    }, [data, loading]);
     // solve snapshot problem
     // const billRef = useRef(allBills);
 
@@ -58,33 +59,22 @@ function InvolverBoard() {
     // useEffect(() => {
     //     billRef.current = allBills;
     // });
-    if (error) {
-        return (
-            <div>
-                <h2>Error happen!! Please waite</h2>
-                {error}
-            </div>
-        );
-    }
-    if (loading) {
+    if (loading || error) {
         return (
             <div>
                 <h2>Loading</h2>
                 <CircularProgress color="primary" />
+                {error && (
+                    <div>
+                        <h2>Error happen!! Please waite</h2>
+                        <p>ERROR:{error.message}</p>
+                    </div>
+                )}
             </div>
         );
     }
     return (
         <div>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    marginBottom: '10px',
-                }}
-            >
-                <AddNewInvolver />
-            </div>
             {/* show user list */}
             {tableContent.length !== 0 ? (
                 <TableDisplay
@@ -98,4 +88,4 @@ function InvolverBoard() {
     );
 }
 
-export default InvolverBoard;
+export default InvolverDisplay;

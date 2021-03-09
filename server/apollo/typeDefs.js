@@ -9,6 +9,7 @@ module.exports = gql`
         involverIDs: [ID]!
         events: [Event]
         involvers: [Involver]
+        refetch: Query
     }
 
     type Event {
@@ -21,6 +22,7 @@ module.exports = gql`
         allBills: [Bill]
         allInvolvers: [Involver]
         eventOwner: User
+        refetch: Query
     }
 
     type Involver {
@@ -49,12 +51,12 @@ module.exports = gql`
     }
 
     type Query {
-        getAllUsers: [User]
-        getAllEvents: [Event]
-        getAllInvolver: [Involver]
-        getAllBill: [Bill]
+        getEventID: ID
+        getUserID: ID
         getUserInfoByID(userID: ID!): User
         getEventInfoByID(eventID: ID!): Event
+        getInvolversInUser(userID: ID!): [Involver]
+        getInvolversInEvent(eventID: ID!): [Involver]
     }
 
     input CurrencyObject {
@@ -71,7 +73,7 @@ module.exports = gql`
             eventCreateDate: String
         ): Event
         joinNewInvolver(userID: ID!, involverName: String!): Involver
-        involverJoinEvent(involverID: ID!, eventID: ID!): Boolean
+        involverJoinEvent(involverID: ID!, eventID: ID!): Involver
         addNewBillToEvent(
             eventID: ID!
             payerID: ID!

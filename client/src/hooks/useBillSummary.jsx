@@ -29,10 +29,6 @@ const useBillSummary = () => {
                     }
                 }
             }
-
-            // m.forEach((val, key) => {
-            //     console.log(key, val.getAmount());
-            // });
         }
         // analysis map
         let res = [];

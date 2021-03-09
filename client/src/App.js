@@ -1,5 +1,6 @@
-import React from 'react';
-import Layout from './components/oneEventLayout/Layout';
+import React, { useEffect } from 'react';
+import Layout from './components/Event/Layout';
+
 function App() {
     return (
         <>

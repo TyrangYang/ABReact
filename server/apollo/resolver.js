@@ -11,27 +11,29 @@ const moment = require('moment');
 
 module.exports = {
     Query: {
+        // TEMP
+        getEventID: async (parent) => {
+            let res = await eventModel.find();
+            return res[0]._id;
+        },
+        // TEMP
+        getUserID: async (parent) => {
+            let res = await userModel.find();
+            return res[0]._id;
+        },
         getUserInfoByID: async (parent, { userID }) => {
             return await userModel.findById(userID);
         },
         getEventInfoByID: async (parent, { eventID }) => {
             return await eventModel.findById(eventID);
         },
-        getAllUsers: async (parent, args) => {
-            // XXX: will removes
-            return await userModel.find();
+        getInvolversInUser: async (parent, { userID }) => {
+            let { involverIDs } = await userModel.findById(userID);
+            return await involverModel.find({ _id: { $in: involverIDs } });
         },
-        getAllEvents: async (parent, args) => {
-            // XXX: will removes
-            return await eventModel.find();
-        },
-        getAllInvolver: async (parent, args) => {
-            // XXX: will removes
-            return await involverModel.find();
-        },
-        getAllBill: async (parent, args) => {
-            // XXX: will removes
-            return await billModel.find();
+        getInvolversInEvent: async (parent, { eventID }) => {
+            let { allInvolverIDs } = await eventModel.findById(eventID);
+            return await involverModel.find({ _id: { $in: allInvolverIDs } });
         },
     },
     User: {
@@ -45,6 +47,7 @@ module.exports = {
                 _id: { $in: parent.involverIDs },
             });
         },
+        refetch: () => ({}),
     },
     Bill: {
         payer: async (parent, args) => {
@@ -71,6 +74,7 @@ module.exports = {
                 _id: { $in: parent.allInvolverIDs },
             });
         },
+        refetch: () => ({}),
     },
 
     Involver: {
@@ -126,17 +130,15 @@ module.exports = {
         },
         involverJoinEvent: async (parent, args) => {
             let { involverID, eventID } = args;
-            let res1 = await involverModel.updateOne(
-                { _id: involverID },
-                { $push: { joinedEventIDs: eventID } }
-            );
-            if (!res1.nModified) return false;
-            let res2 = await eventModel.updateOne(
+            let res1 = await eventModel.updateOne(
                 { _id: eventID },
                 { $push: { allInvolverIDs: involverID } }
             );
-            if (!res2.nModified) return false;
-            return true;
+            if (!res1.nModified) return null;
+            return await involverModel.findOneAndUpdate(
+                { _id: involverID },
+                { $push: { joinedEventIDs: eventID } }
+            );
         },
 
         addNewBillToEvent: async (parent, args) => {

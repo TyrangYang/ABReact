@@ -30,20 +30,16 @@ export default function BillPanel() {
                     <Tab label="transition" />
                     <Tab label="summary" />
                 </Tabs>
-                <AddBillForm />
+                {/* <AddBillForm /> */}
             </div>
 
             <div style={{ display: tabIdx === 0 ? 'block' : 'none' }}>
-                <BillDisplay />
+                {/* <BillDisplay /> */}
             </div>
             <div style={{ display: tabIdx === 1 ? 'block' : 'none' }}>
-                <SummaryBoard />
+                {/* <SummaryBoard /> */}
             </div>
-            {tabIdx === 2 && (
-                <div>
-                    <SummaryChartsPanel />
-                </div>
-            )}
+            {tabIdx === 2 && <div>{/* <SummaryChartsPanel /> */}</div>}
         </PanelContainer>
     );
 }

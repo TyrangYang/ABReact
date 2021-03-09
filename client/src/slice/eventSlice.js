@@ -7,9 +7,16 @@ const eventSlice = createSlice({
         loading: false,
     },
 
-    reducers: {},
+    reducers: {
+        setEventID: (state, action) => {
+            return {
+                ...state,
+                currentEventID: action.payload.id,
+            };
+        },
+    },
 });
 
-export const {} = eventSlice.actions;
+export const { setEventID } = eventSlice.actions;
 
 export default eventSlice.reducer;
