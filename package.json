@@ -7,7 +7,8 @@
         "install": "npm i --prefix server && npm i --prefix client",
         "clean": "npm run clean --prefix server && npm run clean --prefix client",
         "server": "npm run dev --prefix server",
-        "client": "npm start --prefix client"
+        "client": "npm start --prefix client",
+        "init-data": "npm run init-data --prefix server"
     },
     "repository": {
         "type": "git",

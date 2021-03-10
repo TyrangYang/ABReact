@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addBill } from '../../slice/billSlice';
+import React, { useState, useContext, useMemo } from 'react';
+import { eventStore } from '../Event/EventContextProvider';
+import {
+    GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
+    ADD_NEW_BILL_TO_EVENT,
+    GET_BILLS_BY_EVENT_ID,
+} from '../../queries';
+import { useQuery, useMutation } from '@apollo/client';
 
 import { useForm, Controller } from 'react-hook-form';
 import moment from 'moment';
-import { v4 as uuidV4 } from 'uuid';
 
 import {
     Button,
-    IconButton,
     FormControl,
     FormControlLabel,
     InputLabel,
@@ -17,22 +20,53 @@ import {
     Select,
     MenuItem,
     Switch,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from '@material-ui/core';
-import { Add, Close } from '@material-ui/icons/';
-import Styles from './AddBillForm.module.css';
+import Styles from './AddBillFormDialog.module.css';
 import MultiLineSlider from './MultiLineSlider';
-import ModalBox from '../ContentContainers/ModalBox';
 import HoverHelpWidget from '../widgets/HoverHelpWidget';
 
-const AddBillForm = () => {
-    const { allUsers } = useSelector((state) => state.Users);
+const AddBillForm = ({ open, closeDialog }) => {
+    const {
+        state: { currentEventID },
+    } = useContext(eventStore);
 
-    const dispatch = useDispatch();
+    const { data, loading, error } = useQuery(
+        GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
+        {
+            variables: { eventID: currentEventID },
+        }
+    );
 
+    const [addNewBill] = useMutation(ADD_NEW_BILL_TO_EVENT, {
+        update: (cache, { data: { addNewBillToEvent: curItem } }) => {
+            const { getBillsInEvent: prevList } = cache.readQuery({
+                query: GET_BILLS_BY_EVENT_ID,
+                variables: { eventID: currentEventID },
+            });
+
+            cache.writeQuery({
+                query: GET_BILLS_BY_EVENT_ID,
+                variables: { eventID: currentEventID },
+                data: {
+                    getBillsInEvent: [...prevList, curItem],
+                },
+            });
+        },
+    });
+
+    const allInvolvers = useMemo(() => {
+        if (loading || error) return [];
+        else return data?.getInvolversInEvent;
+    }, [data, loading, error]);
+
+    // handle form
     const { handleSubmit, register, watch, errors, control } = useForm();
 
-    const [showAddBillForm, setShowAddBillForm] = useState(false);
-
+    // Watch variables those needed in evenly split on real-time
     const showUnevenlySplit = watch('unevenly');
     const formParticipants = watch('participants', []);
     const formAmount = watch('amount', 0);
@@ -41,103 +75,75 @@ const AddBillForm = () => {
 
     return (
         <div>
-            <Button
-                color="primary"
-                onClick={() => setShowAddBillForm(true)}
-                data-testid="add-new-bill-btn"
-                startIcon={<Add />}
+            <Dialog
+                open={open}
+                onClose={closeDialog}
+                aria-labelledby="add-Bill"
+                fullWidth
+                maxWidth="sm"
             >
-                Add New Bills
-            </Button>
-            {showAddBillForm && (
-                <ModalBox
-                    onClickBackground={() => {
-                        setShowAddBillForm(false);
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <h2>ADD NEW BILL </h2>
-                            <HoverHelpWidget
-                                messageOnHover={
-                                    <div>
-                                        <p>
-                                            Payer is who actual spend the money
-                                        </p>
-                                        <p>
-                                            Participant(s) are those split this
-                                            bill
-                                        </p>
-                                        <p>Do not forgot yourself</p>
-                                    </div>
-                                }
-                            />
-                        </div>
-                        <IconButton
-                            onClick={() => {
-                                setShowAddBillForm(false);
-                            }}
-                        >
-                            <Close />
-                        </IconButton>
-                    </div>
+                <DialogTitle id="add-Bill">
+                    ADD NEW BILL
+                    <HoverHelpWidget
+                        messageOnHover={
+                            <div>
+                                <p>Payer is who actual spend the money</p>
+                                <p>Participant(s) are those split this bill</p>
+                                <p>Do not forgot yourself</p>
+                            </div>
+                        }
+                    />
+                </DialogTitle>
+                <DialogContent>
                     <form
                         data-testid="add-new-bill-form"
+                        id="add-bill-form"
                         className={Styles.addBillForm}
                         onSubmit={handleSubmit((e) => {
                             if (!e.unevenly) {
-                                dispatch(
-                                    addBill({
-                                        id: uuidV4(),
-                                        payer: e.payer,
+                                console.log(e);
+                                addNewBill({
+                                    variables: {
+                                        eventID: currentEventID,
+                                        payerID: e.payer.id,
+                                        participantsID: e.participants.map(
+                                            (e) => e.id
+                                        ),
                                         amount: {
                                             amount: +e.amount * 100,
                                             currency: 'USD',
                                             precision: 2,
                                         },
-                                        participants: e.participants,
                                         date: e.date,
-                                    })
-                                );
+                                    },
+                                });
                             } else {
-                                e.participants.forEach((each, idx) => {
-                                    dispatch(
-                                        addBill({
-                                            id: uuidV4(),
-                                            payer: e.payer,
+                                unevenlyRes.forEach((each) => {
+                                    addNewBill({
+                                        variables: {
+                                            eventID: currentEventID,
+                                            payerID: e.payer.id,
+                                            participantsID: [each.id],
                                             amount: {
-                                                amount: +unevenlyRes[idx] * 100,
+                                                amount: +each.amount * 100,
                                                 currency: 'USD',
                                                 precision: 2,
                                             },
-                                            participants: [each],
                                             date: e.date,
-                                        })
-                                    );
+                                        },
+                                    });
                                 });
                             }
-                            setShowAddBillForm(false);
+                            closeDialog();
                         })}
                     >
-                        {/* payer */}
                         <FormControl error={!!errors.payer}>
                             <InputLabel id="Payer_label">Payer</InputLabel>
                             <Controller
                                 as={
                                     <Select labelId="Payer_label" value="">
-                                        {allUsers.map((e) => (
-                                            <MenuItem key={e.id} value={e.id}>
+                                        {allInvolvers.map((e) => (
+                                            <MenuItem key={e.id} value={e}>
                                                 {e.name}
                                             </MenuItem>
                                         ))}
@@ -152,7 +158,7 @@ const AddBillForm = () => {
                                 {!!errors.payer && errors.payer.message}
                             </FormHelperText>
                         </FormControl>
-                        {/* amount */}
+
                         <TextField
                             data-testid="add-bill-amount"
                             label="Amount"
@@ -171,14 +177,14 @@ const AddBillForm = () => {
                                 !!errors.amount && errors.amount.message
                             }
                         />
-                        {/* Participant */}
+
                         <FormControl error={!!errors.participants}>
                             <InputLabel id="test"> Participant(s) </InputLabel>
                             <Controller
                                 as={
                                     <Select multiple labelId="test">
-                                        {allUsers.map((e) => (
-                                            <MenuItem key={e.id} value={e.id}>
+                                        {allInvolvers.map((e) => (
+                                            <MenuItem key={e.id} value={e}>
                                                 {e.name}
                                             </MenuItem>
                                         ))}
@@ -199,7 +205,7 @@ const AddBillForm = () => {
                                     errors.participants.message}
                             </FormHelperText>
                         </FormControl>
-                        {/* dates */}
+
                         <TextField
                             label="date"
                             type="date"
@@ -210,7 +216,6 @@ const AddBillForm = () => {
                             helperText={!!errors.date && errors.date.message}
                         />
 
-                        {/* show unevenly split */}
                         <FormControlLabel
                             labelPlacement="start"
                             label="Unevenly split"
@@ -242,28 +247,26 @@ const AddBillForm = () => {
                                     outGoingRes={setUnevenlyRes}
                                 />
                             )}
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            data-testid="submit-btn"
-                        >
-                            Confirm
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setShowAddBillForm(false);
-                            }}
-                            data-testid="cancel-btn"
-                        >
-                            Cancel
-                        </Button>
                     </form>
-                </ModalBox>
-            )}
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        color="primary"
+                        onClick={closeDialog}
+                        data-testid="cancel-btn"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        color="primary"
+                        type="submit"
+                        form="add-bill-form"
+                        data-testid="submit-btn"
+                    >
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

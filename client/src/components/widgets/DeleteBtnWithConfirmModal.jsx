@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import ModalBox from '../ContentContainers/ModalBox';
-import { Button, IconButton, OutlinedInput } from '@material-ui/core';
+import {
+    Button,
+    IconButton,
+    OutlinedInput,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogActions,
+} from '@material-ui/core';
 import { Delete, Close } from '@material-ui/icons';
 
 const DeleteBtnWithConfirmModal = ({
@@ -29,7 +37,7 @@ const DeleteBtnWithConfirmModal = ({
             >
                 <Delete />
             </IconButton>
-
+            {/* TODO: change to dialog */}
             {showModal && (
                 <ModalBox
                     onClickBackground={() => closeModal()}

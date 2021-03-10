@@ -51,6 +51,7 @@ const OneTableRow = ({ rowData, setShowDelConfirmSnackbar }) => {
                 </TableCell>
                 <TableCell align="center">{rowData.date}</TableCell>
                 <TableCell align="center">
+                    {/* // TODO: del bill */}
                     <DeleteBtnConfirmModal
                         title="Do you want Delete this Bill?"
                         confirmMessage="123"

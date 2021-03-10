@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import AddBillForm from '../Bill/AddBillForm';
+import AddBillFormDialog from '../Bill/AddBillFormDialog';
 import BillDisplay from '../Bill/BillDisplay';
 import SummaryBoard from '../Summary/SummaryBoard';
 import PanelContainer from '../ContentContainers/PanelContainer';
 
-import { Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab, Button } from '@material-ui/core';
+import { Add } from '@material-ui/icons/';
 
 import SummaryChartsPanel from '../Summary/SummaryChartsPanel';
 
 export default function BillPanel() {
     const [tabIdx, setTabIdx] = useState(0);
+    const [showAddBillForm, setShowAddBillForm] = useState(false);
 
     return (
         <PanelContainer style={{ height: '100vh' }}>
@@ -30,11 +32,22 @@ export default function BillPanel() {
                     <Tab label="transition" />
                     <Tab label="summary" />
                 </Tabs>
-                {/* <AddBillForm /> */}
+                <Button
+                    color="primary"
+                    onClick={() => setShowAddBillForm(true)}
+                    data-testid="add-new-bill-btn"
+                    startIcon={<Add />}
+                >
+                    Add New Bills
+                </Button>
+                <AddBillFormDialog
+                    open={showAddBillForm}
+                    closeDialog={() => setShowAddBillForm(false)}
+                />
             </div>
 
             <div style={{ display: tabIdx === 0 ? 'block' : 'none' }}>
-                {/* <BillDisplay /> */}
+                <BillDisplay />
             </div>
             <div style={{ display: tabIdx === 1 ? 'block' : 'none' }}>
                 {/* <SummaryBoard /> */}

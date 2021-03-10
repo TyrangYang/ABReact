@@ -25,7 +25,7 @@ function InvolverDisplay() {
     const allInvolvers = useMemo(() => {
         if (loading || error) return [];
         else return data?.getInvolversInEvent;
-    }, [data, loading]);
+    }, [data, loading, error]);
     // solve snapshot problem
     // const billRef = useRef(allBills);
 
@@ -75,7 +75,7 @@ function InvolverDisplay() {
     }
     return (
         <div>
-            {/* show user list */}
+            {/* show involvers list */}
             {tableContent.length !== 0 ? (
                 <TableDisplay
                     tableContent={tableContent}

@@ -11,13 +11,6 @@ const APOLLO_SERVER_URI = 'http://localhost:4000/graphql';
 const client = new ApolloClient({
     uri: APOLLO_SERVER_URI,
     cache: new InMemoryCache(),
-
-    // add refetch field to automatically update cache
-    // cache: new InMemoryCache({
-    //     typePolicies: {
-
-    //     }
-    // }),
 });
 
 ReactDOM.render(

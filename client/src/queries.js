@@ -96,3 +96,55 @@ export const ADD_NEW_INVOLVER_IN_EVENT = gql`
         }
     }
 `;
+
+export const GET_BILLS_BY_EVENT_ID = gql`
+    query($eventID: ID!) {
+        getBillsInEvent(eventID: $eventID) {
+            id
+            payer {
+                name
+            }
+            participants {
+                name
+            }
+            amount {
+                amount
+                currency
+                precision
+            }
+            date
+        }
+    }
+`;
+
+export const ADD_NEW_BILL_TO_EVENT = gql`
+    mutation(
+        $eventID: ID!
+        $payerID: ID!
+        $participantsID: [ID]!
+        $amount: CurrencyObject!
+        $date: String
+    ) {
+        addNewBillToEvent(
+            eventID: $eventID
+            payerID: $payerID
+            participantsID: $participantsID
+            amount: $amount
+            date: $date
+        ) {
+            id
+            payer {
+                name
+            }
+            participants {
+                name
+            }
+            amount {
+                amount
+                currency
+                precision
+            }
+            date
+        }
+    }
+`;

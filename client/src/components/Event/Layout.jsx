@@ -14,7 +14,7 @@ export default function Layout() {
             <Grid container>
                 <TestPart />
                 <Grid item sm={9}>
-                    {/* <BillPanel /> */}
+                    <BillPanel />
                 </Grid>
                 <Grid item sm={3}>
                     <InvolverPanel />

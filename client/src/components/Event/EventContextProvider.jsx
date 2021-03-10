@@ -25,7 +25,7 @@ function EventContextProvider({ children, eventID }) {
         }
     }, initialState);
     useEffect(() => {
-        if (!l1 && !l2) {
+        if (!l1 && !l2 && !e1 && !e2) {
             dispatch({
                 type: 'setEventID',
                 payload: d2.getEventID,
@@ -35,8 +35,7 @@ function EventContextProvider({ children, eventID }) {
                 payload: d1.getUserID,
             });
         }
-    }, [d1, d2, l1, l2]);
-    console.log(state);
+    }, [d1, d2, l1, l2, e1, e2]);
     return <Provider value={{ state, dispatch }}>{children}</Provider>;
 }
 

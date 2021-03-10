@@ -57,6 +57,7 @@ module.exports = gql`
         getEventInfoByID(eventID: ID!): Event
         getInvolversInUser(userID: ID!): [Involver]
         getInvolversInEvent(eventID: ID!): [Involver]
+        getBillsInEvent(eventID: ID!): [Bill]
     }
 
     input CurrencyObject {

@@ -1,26 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PanelContainer from '../ContentContainers/PanelContainer';
 import InvolverDisplay from '../Involver/InvolverDisplay';
-import CreateNewInvolver from '../Involver/CreateNewInvolver';
-import SelectInvolversToJoinEvent from '../Involver/SelectInvolversToJoinEvent';
+import SelectInvolversToJoinEvent from '../Involver/SelectInvolversToJoinEventDialog';
+import { Button } from '@material-ui/core';
+import { PersonAddOutlined } from '@material-ui/icons';
 
-import { useSelector } from 'react-redux';
-
-export default function UserPanel() {
-    const { currentEventID } = useSelector((state) => state.Event);
-    const { currentUserID } = useSelector((state) => state.User);
-
+export default function InvolverPanel() {
+    const [showDialog, setShowDialog] = useState(false);
     return (
         <PanelContainer style={{ height: '100vh' }}>
             {/* <CreateNewInvolver
-                currentEventID={currentEventID}
-                currentUserID={currentUserID}
             /> */}
+            <Button
+                color="primary"
+                onClick={() => {
+                    setShowDialog(true);
+                }}
+                startIcon={<PersonAddOutlined />}
+            >
+                Add New Involver
+            </Button>
             <SelectInvolversToJoinEvent
-                currentEventID={currentEventID}
-                currentUserID={currentUserID}
+                open={showDialog}
+                closeDialog={() => setShowDialog(false)}
             />
-            <InvolverDisplay currentEventID={currentEventID} />
+            <InvolverDisplay />
         </PanelContainer>
     );
 }

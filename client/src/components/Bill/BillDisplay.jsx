@@ -1,34 +1,48 @@
-import React, { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useMemo, useContext, useState } from 'react';
+import { eventStore } from '../Event/EventContextProvider';
+import { GET_BILLS_BY_EVENT_ID } from '../../queries';
+import { useQuery } from '@apollo/client';
 
 import Dinero from 'dinero.js';
-import { useUserName } from '../../hooks/useUserName';
+import moment from 'moment';
 
 import BillTableDisplay from './BillTableDisplay';
 import DeleteConfirmSnackbar from '../widgets/DeleteConfirmSnackbar';
 
 const BillDisplay = () => {
-    const { allBills } = useSelector((state) => state.Bills);
-    const getNameById = useUserName();
+    const {
+        state: { currentEventID },
+    } = useContext(eventStore);
+
+    const { data, loading, error } = useQuery(GET_BILLS_BY_EVENT_ID, {
+        variables: { eventID: currentEventID },
+    });
+
+    const allBills = useMemo(() => {
+        if (loading || error) return [];
+        return data?.getBillsInEvent;
+    }, [loading, error, data]);
+
     const [showDelConfirmSnackbar, setShowDelConfirmSnackbar] = useState(false);
 
     const tableContent = useMemo(() => {
         return allBills.map((e) => {
             return {
                 id: e.id,
-                payer: getNameById(e.payer),
+                payer: e.payer.name,
                 amount: Dinero(e.amount).toFormat(),
-                participants: e.participants.map((e) => getNameById(e)),
-                date: e.date,
+                participants: e.participants.map((e) => e.name),
+                date: moment(+e.date).format('YYYY-MM-DD'),
             };
         });
-    }, [allBills, getNameById]);
+    }, [allBills]);
 
     return (
         <div>
             {tableContent.length !== 0 ? (
                 <BillTableDisplay
                     tableContent={tableContent}
+                    // TODO: NEED TO REBUILD DEL
                     setShowDelConfirmSnackbar={setShowDelConfirmSnackbar}
                 />
             ) : (

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { Grid, Slider, Input } from '@material-ui/core';
-import { useUserName } from '../../hooks/useUserName';
 
 import Dinero from 'dinero.js';
 
@@ -18,12 +17,15 @@ const throttle = (fn, delay) => {
 };
 
 function MultiLineSlider({ formParticipants, totalAmount, outGoingRes }) {
-    const getUserById = useUserName();
-
     const [inputValues, setInputValues] = useState([]);
 
     useEffect(() => {
-        outGoingRes(inputValues);
+        outGoingRes(
+            formParticipants.map((e, idx) => ({
+                id: e.id,
+                amount: inputValues[idx],
+            }))
+        );
     });
 
     useEffect(() => {
@@ -76,12 +78,12 @@ function MultiLineSlider({ formParticipants, totalAmount, outGoingRes }) {
         inputValues.length === 0 ||
         inputValues.length !== formParticipants.length
     )
-        return;
+        return <div>spilt nothing</div>;
     return (
         <Grid container direction="column" style={{ alignItems: 'center' }}>
             {formParticipants.map((eachParticipants, idx) => (
                 <Grid key={idx} container item xs spacing={2}>
-                    <Grid item>{getUserById(eachParticipants)}</Grid>
+                    <Grid item>{eachParticipants.name}</Grid>
                     <Grid item xs>
                         <Slider
                             value={inputValues[idx]}

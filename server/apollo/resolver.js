@@ -35,6 +35,10 @@ module.exports = {
             let { allInvolverIDs } = await eventModel.findById(eventID);
             return await involverModel.find({ _id: { $in: allInvolverIDs } });
         },
+        getBillsInEvent: async (parent, { eventID }) => {
+            let { allBillIDs } = await eventModel.findById(eventID);
+            return await billModel.find({ _id: { $in: allBillIDs } });
+        },
     },
     User: {
         events: async (parent, args) => {

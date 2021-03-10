@@ -9,19 +9,15 @@ import {
 
 import {
     Button,
-    FormControlLabel,
-    TextField,
-    Checkbox,
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
 } from '@material-ui/core';
-import { PersonAddOutlined } from '@material-ui/icons';
 
 import TransferList from './TransferList';
 
-const SelectInvolversToJoinEvent = () => {
+const SelectInvolversToJoinEventDialog = ({ open, closeDialog }) => {
     const {
         state: { currentEventID, currentUserID },
     } = useContext(eventStore);
@@ -62,7 +58,8 @@ const SelectInvolversToJoinEvent = () => {
     });
 
     const [involverInEvent, involverOutEvent] = useMemo(() => {
-        if (!eventData_Involvers || !userData_Involvers) return [[], []];
+        if (eventLoading || eventError || userLoading || userError)
+            return [[], []];
         let { getInvolversInEvent } = eventData_Involvers;
         let { getInvolversInUser } = userData_Involvers;
         let inEvent = [],
@@ -78,12 +75,16 @@ const SelectInvolversToJoinEvent = () => {
             else outEvent.push(each);
         });
         return [inEvent, outEvent];
-    }, [eventData_Involvers, userData_Involvers]);
+    }, [
+        eventData_Involvers,
+        userData_Involvers,
+        eventLoading,
+        eventError,
+        userLoading,
+        userError,
+    ]);
 
-    const [showDialog, setShowDialog] = useState(false);
     const [candidate, setCandidate] = useState([]);
-
-    const handleOnClose = () => setShowDialog(false);
 
     const onClickConfirm = () => {
         // mutation: add candidate to an event
@@ -101,18 +102,9 @@ const SelectInvolversToJoinEvent = () => {
 
     return (
         <>
-            <Button
-                color="primary"
-                onClick={() => {
-                    setShowDialog(true);
-                }}
-                startIcon={<PersonAddOutlined />}
-            >
-                Add New Involver
-            </Button>
             <Dialog
-                open={showDialog}
-                onClose={handleOnClose}
+                open={open}
+                onClose={closeDialog}
                 aria-labelledby="add-Involver"
                 fullWidth
                 maxWidth="md"
@@ -126,14 +118,14 @@ const SelectInvolversToJoinEvent = () => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button color="primary" onClick={handleOnClose}>
+                    <Button color="primary" onClick={closeDialog}>
                         cancel
                     </Button>
                     <Button
                         type="submit"
                         color="primary"
                         onClick={() => {
-                            handleOnClose();
+                            closeDialog();
                             onClickConfirm();
                         }}
                     >
@@ -145,4 +137,4 @@ const SelectInvolversToJoinEvent = () => {
     );
 };
 
-export default SelectInvolversToJoinEvent;
+export default SelectInvolversToJoinEventDialog;

@@ -6,7 +6,8 @@
     "scripts": {
         "clean": "rm -rf node_modules",
         "dev": "concurrently 'nodemon server.js'",
-        "rest-server": "json-server --watch db.json --port 3004"
+        "rest-server": "json-server --watch db.json --port 3004",
+        "init-data": "node InitializeData.js"
     },
     "keywords": [],
     "author": "",
