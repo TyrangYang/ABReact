@@ -14,45 +14,51 @@ export default function BillPanel() {
     const [showAddBillForm, setShowAddBillForm] = useState(false);
 
     return (
-        <PanelContainer style={{ height: '100vh' }}>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}
-            >
-                <Tabs
-                    value={tabIdx}
-                    onChange={(e, newIdx) => setTabIdx(newIdx)}
-                    indicatorColor="primary"
-                    aria-label="tabs"
+        <>
+            <PanelContainer style={{ height: '100vh' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
                 >
-                    <Tab label="bill Record" />
-                    <Tab label="transition" />
-                    <Tab label="summary" />
-                </Tabs>
-                <Button
-                    color="primary"
-                    onClick={() => setShowAddBillForm(true)}
-                    data-testid="add-new-bill-btn"
-                    startIcon={<Add />}
-                >
-                    Add New Bills
-                </Button>
-                <AddBillFormDialog
-                    open={showAddBillForm}
-                    closeDialog={() => setShowAddBillForm(false)}
-                />
-            </div>
+                    <Tabs
+                        value={tabIdx}
+                        onChange={(e, newIdx) => setTabIdx(newIdx)}
+                        indicatorColor="primary"
+                        aria-label="tabs"
+                    >
+                        <Tab label="bill Record" />
+                        <Tab label="transition" />
+                        <Tab label="summary" />
+                    </Tabs>
+                    <Button
+                        color="primary"
+                        onClick={() => setShowAddBillForm(true)}
+                        data-testid="add-new-bill-btn"
+                        startIcon={<Add />}
+                    >
+                        Add New Bills
+                    </Button>
+                </div>
 
-            <div style={{ display: tabIdx === 0 ? 'block' : 'none' }}>
-                <BillDisplay />
-            </div>
-            <div style={{ display: tabIdx === 1 ? 'block' : 'none' }}>
-                {/* <SummaryBoard /> */}
-            </div>
-            {tabIdx === 2 && <div>{/* <SummaryChartsPanel /> */}</div>}
-        </PanelContainer>
+                <div style={{ display: tabIdx === 0 ? 'block' : 'none' }}>
+                    <BillDisplay />
+                </div>
+                <div style={{ display: tabIdx === 1 ? 'block' : 'none' }}>
+                    <SummaryBoard />
+                </div>
+                {tabIdx === 2 && (
+                    <div>
+                        <SummaryChartsPanel />
+                    </div>
+                )}
+            </PanelContainer>
+            <AddBillFormDialog
+                open={showAddBillForm}
+                closeDialog={() => setShowAddBillForm(false)}
+            />
+        </>
     );
 }

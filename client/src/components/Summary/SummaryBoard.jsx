@@ -24,13 +24,13 @@ const SummaryBoard = () => {
     const sortSummary = (oriSummary) => {
         if (sortState === 0) {
             oriSummary.sort((a, b) => {
-                if (a.from < b.from) return -1;
+                if (a.from.id < b.from.id) return -1;
                 else return 1;
             });
         }
         if (sortState === 1) {
             oriSummary.sort((a, b) => {
-                if (a.to < b.to) return -1;
+                if (a.to.id < b.to.id) return -1;
                 else return 1;
             });
         }
@@ -53,28 +53,28 @@ const SummaryBoard = () => {
 
         // Greedy method to calculate a relative less transaction
         let res = [];
-        let payerListCopy = payerList.map((e) => [...e]),
-            receiverListCopy = receiverList.map((e) => [...e]);
+        let payerListCopy = payerList.map((e) => ({ ...e })),
+            receiverListCopy = receiverList.map((e) => ({ ...e }));
         while (payerListCopy.length !== 0) {
             let curPayer = payerListCopy.pop();
-            while (curPayer[1] !== 0) {
+            while (curPayer.amount !== 0) {
                 // current payer still need pay somebody
                 let curReceiver = receiverListCopy.pop();
-                if (curReceiver[1] <= Math.abs(curPayer[1])) {
+                if (curReceiver.amount <= Math.abs(curPayer.amount)) {
                     res.push({
-                        from: curPayer[0],
-                        to: curReceiver[0],
-                        amount: Dinero({ amount: curReceiver[1] }),
+                        from: curPayer.involver,
+                        to: curReceiver.involver,
+                        amount: Dinero({ amount: curReceiver.amount }),
                     });
-                    curPayer[1] += curReceiver[1];
+                    curPayer.amount += curReceiver.amount;
                 } else {
                     res.push({
-                        from: curPayer[0],
-                        to: curReceiver[0],
-                        amount: Dinero({ amount: 0 - curPayer[1] }),
+                        from: curPayer.involver,
+                        to: curReceiver.involver,
+                        amount: Dinero({ amount: 0 - curPayer.amount }),
                     });
-                    curReceiver[1] -= Math.abs(curPayer[1]);
-                    curPayer[1] = 0;
+                    curReceiver.amount -= Math.abs(curPayer.amount);
+                    curPayer.amount = 0;
                     receiverListCopy.push(curReceiver);
                 }
             }

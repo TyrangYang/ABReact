@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "clean": "rm -rf node_modules",
-        "dev": "concurrently 'nodemon server.js'",
+        "dev": "nodemon server.js",
         "rest-server": "json-server --watch db.json --port 3004",
         "init-data": "node InitializeData.js"
     },
@@ -21,7 +21,6 @@
         "mongoose": "^5.11.18"
     },
     "devDependencies": {
-        "concurrently": "^6.0.0",
         "json-server": "^0.16.2",
         "nodemon": "^2.0.7"
     }

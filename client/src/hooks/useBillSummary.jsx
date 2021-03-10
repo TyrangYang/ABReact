@@ -1,9 +1,25 @@
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useContext, useMemo } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_BILLS_BY_EVENT_ID } from '../queries';
+
+import { eventStore } from '../components/Event/EventContextProvider';
+
 import Dinero from 'dinero.js';
 
 const useBillSummary = () => {
-    const { allBills } = useSelector((state) => state.Bills);
+    const {
+        state: { currentEventID },
+    } = useContext(eventStore);
+
+    const { data, loading, error } = useQuery(GET_BILLS_BY_EVENT_ID, {
+        variables: { eventID: currentEventID },
+    });
+
+    const allBills = useMemo(() => {
+        if (loading || error) return [];
+        return data?.getBillsInEvent;
+    }, [loading, error, data]);
+
     const summary = useMemo(() => {
         let m = new Map();
         for (let bill of allBills) {
@@ -17,7 +33,8 @@ const useBillSummary = () => {
                         to = bill.payer,
                         amount = allocate[i],
                         key = '';
-                    if (from < to) {
+                    if (from.id === to.id) continue;
+                    if (from.id < to.id) {
                         key = JSON.stringify([from, to]);
                     } else {
                         key = JSON.stringify([to, from]);
@@ -58,36 +75,36 @@ const useBillSummary = () => {
         let record = {};
 
         for (let each of summary) {
-            record[each.from] = 0;
-            record[each.to] = 0;
+            record[each.from.id] = { involver: each.from, amount: 0 };
+            record[each.to.id] = { involver: each.to, amount: 0 };
         }
 
         for (let each of summary) {
             if (each.amount.getAmount() > 0) {
-                record[each.from] -= each.amount.getAmount();
-                record[each.to] += each.amount.getAmount();
+                record[each.from.id].amount -= each.amount.getAmount();
+                record[each.to.id].amount += each.amount.getAmount();
             } else {
                 // < 0 (not == 0)
-                record[each.from] += each.amount.getAmount();
-                record[each.to] -= each.amount.getAmount();
+                record[each.from.id].amount += each.amount.getAmount();
+                record[each.to.id].amount -= each.amount.getAmount();
             }
         }
 
         let payerList = [],
             receiverList = [];
         for (let each in record) {
-            if (record[each] < 0) {
-                payerList.push([each, record[each]]);
-            } else if (record[each] > 0) {
-                receiverList.push([each, record[each]]);
+            if (record[each].amount < 0) {
+                payerList.push(record[each]);
+            } else if (record[each].amount > 0) {
+                receiverList.push(record[each]);
             } else {
                 // record[each] == 0
                 continue;
             }
         }
         // sort two list
-        payerList.sort((a, b) => a[1] - b[1]);
-        receiverList.sort((a, b) => b[1] - a[1]);
+        payerList.sort((a, b) => a.amount - b.amount);
+        receiverList.sort((a, b) => b.amount - a.amount);
 
         return [payerList, receiverList];
     }, [summary]);

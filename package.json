@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "start": "concurrently \"npm:server\" \"npm:client\"",
         "install": "npm i --prefix server && npm i --prefix client",
         "clean": "npm run clean --prefix server && npm run clean --prefix client",
         "server": "npm run dev --prefix server",
@@ -20,5 +21,8 @@
     "bugs": {
         "url": "https://github.com/TyrangYang/ABReact/issues"
     },
-    "homepage": "https://github.com/TyrangYang/ABReact#readme"
+    "homepage": "https://github.com/TyrangYang/ABReact#readme",
+    "devDependencies": {
+        "concurrently": "^6.0.0"
+    }
 }

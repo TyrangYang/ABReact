@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { useUserName } from '../../../hooks/useUserName';
 
 const nextColor = (function () {
     // console.log('next color fun');
@@ -78,15 +77,13 @@ const options = {
 };
 
 const UserMoneyStatusPieChart = ({ payerList, receiverList }) => {
-    const getNameById = useUserName();
-
     const renderData = useMemo(() => {
         return {
             datasets: [
                 {
                     label: 'will receive',
-                    data: receiverList.map((e) => e[1] / 100),
-                    labels: receiverList.map((e) => getNameById(e[0])),
+                    data: receiverList.map((e) => e.amount / 100),
+                    labels: receiverList.map((e) => e.involver.name),
                     backgroundColor: receiverList.map(() => nextColor()),
                     borderColor: '#fff',
                     borderWidth: 8,
@@ -94,8 +91,8 @@ const UserMoneyStatusPieChart = ({ payerList, receiverList }) => {
                 },
                 {
                     label: 'need spend',
-                    data: payerList.map((e) => e[1] / 100),
-                    labels: payerList.map((e) => getNameById(e[0])),
+                    data: payerList.map((e) => e.amount / 100),
+                    labels: payerList.map((e) => e.involver.name),
                     backgroundColor: payerList.map(() => nextColor()),
                     borderColor: '#fff',
                     borderWidth: 4,
@@ -103,7 +100,7 @@ const UserMoneyStatusPieChart = ({ payerList, receiverList }) => {
                 },
             ],
         };
-    }, [payerList, receiverList, getNameById]);
+    }, [payerList, receiverList]);
 
     if (payerList.length === 0 || receiverList.length === 0)
         return (

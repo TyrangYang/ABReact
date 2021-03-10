@@ -29,6 +29,7 @@ const DeleteBtnWithConfirmModal = ({
 
     return (
         <div>
+            {/* TODO: Button move out */}
             <IconButton
                 color="secondary"
                 onClick={() => {

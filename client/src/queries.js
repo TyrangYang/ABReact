@@ -102,9 +102,11 @@ export const GET_BILLS_BY_EVENT_ID = gql`
         getBillsInEvent(eventID: $eventID) {
             id
             payer {
+                id
                 name
             }
             participants {
+                id
                 name
             }
             amount {
@@ -134,9 +136,11 @@ export const ADD_NEW_BILL_TO_EVENT = gql`
         ) {
             id
             payer {
+                id
                 name
             }
             participants {
+                id
                 name
             }
             amount {
