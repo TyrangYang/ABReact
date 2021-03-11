@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "concurrently \"npm:server\" \"npm:client\"",
+        "start": "npm i && concurrently \"npm:server\" \"npm:client\"",
         "install": "npm i --prefix server && npm i --prefix client",
-        "clean": "npm run clean --prefix server && npm run clean --prefix client",
+        "clean": "npm run clean --prefix server && npm run clean --prefix client && rm -rf node_modules",
         "server": "npm run dev --prefix server",
         "client": "npm start --prefix client",
         "init-data": "npm run init-data --prefix server"

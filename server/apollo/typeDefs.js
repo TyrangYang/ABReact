@@ -73,7 +73,7 @@ module.exports = gql`
             eventName: String!
             eventCreateDate: String
         ): Event
-        joinNewInvolver(userID: ID!, involverName: String!): Involver
+        createNewInvolverToUser(userID: ID!, involverName: String!): Involver
         involverJoinEvent(involverID: ID!, eventID: ID!): Involver
         addNewBillToEvent(
             eventID: ID!
@@ -83,7 +83,7 @@ module.exports = gql`
             date: String
         ): Bill
 
-        removeBillFromEvent(eventID: ID!, billID: ID!): Boolean
+        removeBillFromEvent(eventID: ID!, billID: ID!): Bill
         involverLeaveEvent(eventID: ID!, involverID: ID!): Boolean
     }
 `;

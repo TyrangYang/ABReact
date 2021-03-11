@@ -119,7 +119,7 @@ module.exports = {
             );
             return await newEvent.save();
         },
-        joinNewInvolver: async (parent, args) => {
+        createNewInvolverToUser: async (parent, args) => {
             let { userID, involverName } = args;
             let newInvolver = new involverModel({
                 name: involverName,
@@ -169,10 +169,8 @@ module.exports = {
                 { _id: eventID },
                 { $pull: { allBillIDs: billID } }
             );
-            if (!nModified) return false;
-            let { deletedCount } = await billModel.deleteOne({ _id: billID });
-            if (!deletedCount) return false;
-            return true;
+            if (!nModified) return null;
+            return await billModel.findOneAndDelete({ _id: billID });
         },
 
         involverLeaveEvent: async (parent, args) => {

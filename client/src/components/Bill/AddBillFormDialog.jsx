@@ -2,7 +2,7 @@ import React, { useState, useContext, useMemo } from 'react';
 import { eventStore } from '../Event/EventContextProvider';
 import {
     GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
-    ADD_NEW_BILL_TO_EVENT,
+    CREATE_NEW_BILL_TO_EVENT,
     GET_BILLS_BY_EVENT_ID,
 } from '../../queries';
 import { useQuery, useMutation } from '@apollo/client';
@@ -41,7 +41,7 @@ const AddBillForm = ({ open, closeDialog }) => {
         }
     );
 
-    const [addNewBill] = useMutation(ADD_NEW_BILL_TO_EVENT, {
+    const [addNewBill] = useMutation(CREATE_NEW_BILL_TO_EVENT, {
         update: (cache, { data: { addNewBillToEvent: curItem } }) => {
             const { getBillsInEvent: prevList } = cache.readQuery({
                 query: GET_BILLS_BY_EVENT_ID,

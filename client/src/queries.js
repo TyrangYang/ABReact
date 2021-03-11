@@ -77,7 +77,7 @@ export const GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID = gql`
 
 export const CREATE_NEW_INVOLVER_IN_USER = gql`
     mutation($userID: ID!, $involverName: String!) {
-        joinNewInvolver(userID: $userID, involverName: $involverName) {
+        createNewInvolverToUser(userID: $userID, involverName: $involverName) {
             id
             name
             joinedUserID
@@ -119,7 +119,7 @@ export const GET_BILLS_BY_EVENT_ID = gql`
     }
 `;
 
-export const ADD_NEW_BILL_TO_EVENT = gql`
+export const CREATE_NEW_BILL_TO_EVENT = gql`
     mutation(
         $eventID: ID!
         $payerID: ID!
@@ -152,3 +152,27 @@ export const ADD_NEW_BILL_TO_EVENT = gql`
         }
     }
 `;
+
+export const REMOVE_BILL_FROM_EVENT = gql`
+    mutation($eventID: ID!, $billID: ID!) {
+        removeBillFromEvent(eventID: $eventID, billID: $billID) {
+            id
+            payer {
+                id
+                name
+            }
+            participants {
+                id
+                name
+            }
+            amount {
+                amount
+                currency
+                precision
+            }
+            date
+        }
+    }
+`;
+
+// removeBillFromEvent(eventID: ID!, billID: ID!): Bill`;

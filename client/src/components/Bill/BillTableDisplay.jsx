@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-
-import { useDispatch } from 'react-redux';
-import { removeBill } from '../../slice/billSlice';
-
+import { useMutation } from '@apollo/client';
+import { REMOVE_BILL_FROM_EVENT } from '../../queries';
+import { eventStore } from '../Event/EventContextProvider';
 import {
+    IconButton,
     TableContainer,
     Paper,
     Table,
@@ -14,8 +14,9 @@ import {
     TableBody,
     Chip,
 } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import DeleteBtnConfirmModal from '../widgets/DeleteBtnWithConfirmModal';
+import ConfirmDialog from '../widgets/ConfirmDialog';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,7 +40,23 @@ const ParticipantCell = ({ data }) => {
 };
 
 const OneTableRow = ({ rowData, setShowDelConfirmSnackbar }) => {
-    const dispatch = useDispatch();
+    const {
+        state: { currentEventID },
+    } = useContext(eventStore);
+    const [showModal, setShowModal] = useState(false);
+    const [removeBillFromEvent] = useMutation(REMOVE_BILL_FROM_EVENT, {
+        update: (cache, { data: { removeBillFromEvent } }) => {
+            cache.modify({
+                fields: {
+                    getBillsInEvent: (list, { readField }) => {
+                        return list.filter(
+                            (e) => removeBillFromEvent.id !== readField('id', e)
+                        );
+                    },
+                },
+            });
+        },
+    });
 
     return (
         <>
@@ -51,12 +68,29 @@ const OneTableRow = ({ rowData, setShowDelConfirmSnackbar }) => {
                 </TableCell>
                 <TableCell align="center">{rowData.date}</TableCell>
                 <TableCell align="center">
-                    {/* // TODO: del bill */}
-                    <DeleteBtnConfirmModal
+                    <IconButton
+                        color="secondary"
+                        onClick={() => {
+                            setShowModal(true);
+                        }}
+                    >
+                        <Delete />
+                    </IconButton>
+                    <ConfirmDialog
+                        open={showModal}
+                        closeDialog={() => {
+                            setShowModal(false);
+                        }}
                         title="Do you want Delete this Bill?"
                         confirmMessage="123"
                         onClickConfirmDeleteButton={() => {
-                            dispatch(removeBill(rowData.id));
+                            removeBillFromEvent({
+                                variables: {
+                                    eventID: currentEventID,
+                                    billID: rowData.id,
+                                },
+                            });
+                            setShowModal(false);
                             setShowDelConfirmSnackbar(true);
                         }}
                     />

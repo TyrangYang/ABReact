@@ -42,7 +42,6 @@ const BillDisplay = () => {
             {tableContent.length !== 0 ? (
                 <BillTableDisplay
                     tableContent={tableContent}
-                    // TODO: NEED TO REBUILD DEL
                     setShowDelConfirmSnackbar={setShowDelConfirmSnackbar}
                 />
             ) : (

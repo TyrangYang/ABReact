@@ -48,7 +48,7 @@ const CreateNewInvolverDialog = ({ open, closeDialog }) => {
     });
 
     const [createNewInvolver] = useMutation(CREATE_NEW_INVOLVER_IN_USER, {
-        update(cache, { data: { joinNewInvolver } }) {
+        update(cache, { data: { createNewInvolverToUser } }) {
             const { getInvolversInUser } = cache.readQuery({
                 query: GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID,
                 variables: { userID: currentUserID },
@@ -59,7 +59,7 @@ const CreateNewInvolverDialog = ({ open, closeDialog }) => {
                 data: {
                     getInvolversInUser: [
                         ...getInvolversInUser,
-                        joinNewInvolver,
+                        createNewInvolverToUser,
                     ],
                 },
             });
@@ -84,7 +84,7 @@ const CreateNewInvolverDialog = ({ open, closeDialog }) => {
                     onSubmit={handleSubmit(async (e) => {
                         closeDialog();
                         let {
-                            data: { joinNewInvolver },
+                            data: { createNewInvolverToUser },
                         } = await createNewInvolver({
                             variables: {
                                 userID: currentUserID,
@@ -95,7 +95,7 @@ const CreateNewInvolverDialog = ({ open, closeDialog }) => {
                             await involverJoinEvent({
                                 variables: {
                                     eventID: currentEventID,
-                                    involverID: joinNewInvolver.id,
+                                    involverID: createNewInvolverToUser.id,
                                 },
                             });
                         }
