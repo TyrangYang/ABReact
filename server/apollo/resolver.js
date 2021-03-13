@@ -5,10 +5,24 @@ const {
     userModel,
 } = require('../database/model');
 
-// let data = require('../db.json').event;
+const DataLoader = require('dataloader');
+const payerLoader = new DataLoader((keys) => {
+    // return promise
+    let res = keys.map(async (payerID) => {
+        return await involverModel.findById(payerID);
+    });
+    return Promise.resolve(res);
+});
+const participantsLoader = new DataLoader((keys) => {
+    console.log(keys);
+    let res = keys.map(async (participantID) => {
+        return await involverModel.findById(participantID);
+    });
+    return Promise.resolve(res);
+});
 
 const moment = require('moment');
-
+let queryCount = 0;
 module.exports = {
     Query: {
         // TEMP
@@ -36,6 +50,7 @@ module.exports = {
             return await involverModel.find({ _id: { $in: allInvolverIDs } });
         },
         getBillsInEvent: async (parent, { eventID }) => {
+            console.log(++queryCount);
             let { allBillIDs } = await eventModel.findById(eventID);
             return await billModel.find({ _id: { $in: allBillIDs } });
         },
@@ -55,14 +70,10 @@ module.exports = {
     },
     Bill: {
         payer: async (parent, args) => {
-            return await involverModel.findById(parent.payerID);
+            return await payerLoader.load(parent.payerID);
         },
         participants: async (parent, args) => {
-            return await involverModel.find({
-                _id: {
-                    $in: parent.participantsID,
-                },
-            });
+            return await participantsLoader.loadMany(parent.participantsID);
         },
     },
 
@@ -177,14 +188,5 @@ module.exports = {
             let { eventID, involverID } = args;
             // check all bills
         },
-
-        // removeEvent: async (parent, args) => {
-        //     let { eventID } = args;
-        //     await userModel.updateOne(
-        //         { _id: eventOwnerID },
-        //         { $pull: { eventIDs: eventID } }
-        //     );
-        //     return await eventModel.findOneAndRemove({ _id: eventID });
-        // },
     },
 };

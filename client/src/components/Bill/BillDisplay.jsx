@@ -8,6 +8,7 @@ import moment from 'moment';
 
 import BillTableDisplay from './BillTableDisplay';
 import DeleteConfirmSnackbar from '../widgets/DeleteConfirmSnackbar';
+import DataLoading from '../widgets/DataLoading';
 
 const BillDisplay = () => {
     const {
@@ -36,7 +37,9 @@ const BillDisplay = () => {
             };
         });
     }, [allBills]);
-
+    if (loading || error) {
+        return <DataLoading loading={loading} error={error} />;
+    }
     return (
         <div>
             {tableContent.length !== 0 ? (

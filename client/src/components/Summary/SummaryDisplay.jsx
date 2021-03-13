@@ -12,12 +12,32 @@ import TableDisplay from '../ContentContainers/TableDisplay';
 
 import ConfirmDialog from '../widgets/ConfirmDialog';
 
+const BtnWithConfirmDialog = ({ fn }) => {
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    return (
+        <div>
+            <IconButton
+                color="primary"
+                onClick={() => {
+                    setShowConfirmDialog(true);
+                }}
+            >
+                <Archive />
+            </IconButton>
+            <ConfirmDialog
+                open={showConfirmDialog}
+                closeDialog={() => setShowConfirmDialog(false)}
+                confirmMessage="123"
+                onClickConfirmDeleteButton={fn}
+            ></ConfirmDialog>
+        </div>
+    );
+};
+
 const SummaryDisplay = ({ summary, merged }) => {
     const {
         state: { currentEventID },
     } = useContext(eventStore);
-
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
     const [addNewBill] = useMutation(CREATE_NEW_BILL_TO_EVENT, {
         update: (cache, { data: { addNewBillToEvent: curItem } }) => {
@@ -46,40 +66,31 @@ const SummaryDisplay = ({ summary, merged }) => {
                 return [
                     e.from.name + '---->' + e.to.name,
                     e.amount.toFormat(),
-                    <div>
-                        <IconButton
-                            color="primary"
-                            onClick={() => {
-                                // TODO: Need confirm to archive
-                                setShowConfirmDialog((x) => {
-                                    console.log('click and set');
-                                    return !x;
-                                });
-                            }}
-                        >
-                            <Archive />
-                        </IconButton>
-                        <ConfirmDialog
-                            open={showConfirmDialog}
-                            closeDialog={() => showConfirmDialog(false)}
-                            confirmMessage="123"
-                            onClickConfirmDeleteButton={() => {
-                                addNewBill({
-                                    variables: {
-                                        eventID: currentEventID,
-                                        payerID: e.from.id,
-                                        participantsID: [e.to.id],
-                                        amount: e.amount.toJSON(),
-                                        date: moment().format('YYYY-MM-DD'),
-                                    },
-                                });
-                            }}
-                        ></ConfirmDialog>
-                    </div>,
+
+                    <BtnWithConfirmDialog
+                        fn={() => {
+                            addNewBill({
+                                variables: {
+                                    eventID: currentEventID,
+                                    payerID: e.from.id,
+                                    participantsID: [e.to.id],
+                                    amount: e.amount.toJSON(),
+                                    date: moment().format('YYYY-MM-DD'),
+                                },
+                            });
+                        }}
+                    />,
                 ];
             });
         }
-    }, [summary, merged, addNewBill, currentEventID]);
+    }, [
+        summary,
+        merged,
+        addNewBill,
+        currentEventID,
+        // showConfirmDialog,
+        // setShowConfirmDialog,
+    ]);
 
     return (
         <div>

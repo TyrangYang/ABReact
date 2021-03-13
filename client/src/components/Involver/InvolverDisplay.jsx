@@ -1,6 +1,6 @@
-import React, { useMemo, useContext, useRef } from 'react';
+import React, { useMemo, useContext } from 'react';
 
-import { IconButton, Avatar, CircularProgress } from '@material-ui/core';
+import { IconButton, Avatar } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 
 import { useQuery } from '@apollo/client';
@@ -9,6 +9,7 @@ import { GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID } from '../../queries';
 import { eventStore } from '../Event/EventContextProvider';
 
 import TableDisplay from '../ContentContainers/TableDisplay';
+import DataLoading from '../widgets/DataLoading';
 
 function InvolverDisplay() {
     const {
@@ -26,8 +27,6 @@ function InvolverDisplay() {
         if (loading || error) return [];
         else return data?.getInvolversInEvent;
     }, [data, loading, error]);
-    // solve snapshot problem
-    // const billRef = useRef(allBills);
 
     const tableContent = useMemo(() => {
         return allInvolvers.map((e) => {
@@ -43,6 +42,7 @@ function InvolverDisplay() {
                     <Avatar alt={name[0]} src="will be change" />
                     <span>{name}</span>
                 </div>,
+                //  TODO: delete button may not need
                 <IconButton
                     color="secondary"
                     onClick={() => {
@@ -55,23 +55,8 @@ function InvolverDisplay() {
         });
     }, [allInvolvers]);
 
-    // solve snapshot problem
-    // useEffect(() => {
-    //     billRef.current = allBills;
-    // });
     if (loading || error) {
-        return (
-            <div>
-                <h2>Loading</h2>
-                <CircularProgress color="primary" />
-                {error && (
-                    <div>
-                        <h2>Error happen!! Please waite</h2>
-                        <p>ERROR:{error.message}</p>
-                    </div>
-                )}
-            </div>
-        );
+        return <DataLoading loading={loading} error={error} />;
     }
     return (
         <div>

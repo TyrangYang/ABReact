@@ -1,0 +1,25 @@
+import React, { memo } from 'react';
+import propTypes from 'prop-types';
+import { CircularProgress } from '@material-ui/core';
+
+function Loading({ loading, error }) {
+    return (
+        <div>
+            <h2>Loading</h2>
+            <CircularProgress color="primary" />
+            {!loading && error && (
+                <div>
+                    <h2>Error happen!! Please waite</h2>
+                    <p>ERROR:{error.message}</p>
+                </div>
+            )}
+        </div>
+    );
+}
+
+Loading.prototype = {
+    loading: propTypes.bool.isRequired,
+    error: propTypes.object,
+};
+
+export default memo(Loading);

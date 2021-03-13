@@ -116,84 +116,86 @@ let main = async () => {
         );
     };
 
-    await createNewBill(
-        billList,
-        eventID,
-        involversList[0].id,
-        {
-            amount: 10000,
-            currency: 'USD',
-            precision: 2,
-        },
-        [involversList[0].id, involversList[1].id],
-        moment().format('YYYY-MM-DD')
-    );
-    await createNewBill(
-        billList,
-        eventID,
-        involversList[1].id,
-        {
-            amount: 40000,
-            currency: 'USD',
-            precision: 2,
-        },
-        [involversList[0].id, involversList[1].id, involversList[2].id],
-        moment().format('YYYY-MM-DD')
-    );
-    await createNewBill(
-        billList,
-        eventID,
-        involversList[2].id,
-        {
-            amount: 50030,
-            currency: 'USD',
-            precision: 2,
-        },
-        [involversList[2].id, involversList[1].id],
-        moment().format('YYYY-MM-DD')
-    );
-    await createNewBill(
-        billList,
-        eventID,
-        involversList[3].id,
-        {
-            amount: 20045,
-            currency: 'USD',
-            precision: 2,
-        },
-        [involversList[0].id, involversList[4].id],
-        moment().format('YYYY-MM-DD')
-    );
-    await createNewBill(
-        billList,
-        eventID,
-        involversList[1].id,
-        {
-            amount: 10072,
-            currency: 'USD',
-            precision: 2,
-        },
-        [involversList[4].id],
-        moment().format('YYYY-MM-DD')
-    );
-    await createNewBill(
-        billList,
-        eventID,
-        involversList[2].id,
-        {
-            amount: 7063,
-            currency: 'USD',
-            precision: 2,
-        },
-        [
+    for (let i = 0; i < 50; ++i) {
+        await createNewBill(
+            billList,
+            eventID,
             involversList[0].id,
+            {
+                amount: 10000,
+                currency: 'USD',
+                precision: 2,
+            },
+            [involversList[0].id, involversList[1].id],
+            moment().format('YYYY-MM-DD')
+        );
+        await createNewBill(
+            billList,
+            eventID,
             involversList[1].id,
+            {
+                amount: 40000,
+                currency: 'USD',
+                precision: 2,
+            },
+            [involversList[0].id, involversList[1].id, involversList[2].id],
+            moment().format('YYYY-MM-DD')
+        );
+        await createNewBill(
+            billList,
+            eventID,
             involversList[2].id,
+            {
+                amount: 50030,
+                currency: 'USD',
+                precision: 2,
+            },
+            [involversList[2].id, involversList[1].id],
+            moment().format('YYYY-MM-DD')
+        );
+        await createNewBill(
+            billList,
+            eventID,
             involversList[3].id,
-            involversList[4].id,
-        ],
-        moment().format('YYYY-MM-DD')
-    );
+            {
+                amount: 20045,
+                currency: 'USD',
+                precision: 2,
+            },
+            [involversList[0].id, involversList[4].id],
+            moment().format('YYYY-MM-DD')
+        );
+        await createNewBill(
+            billList,
+            eventID,
+            involversList[1].id,
+            {
+                amount: 10072,
+                currency: 'USD',
+                precision: 2,
+            },
+            [involversList[4].id],
+            moment().format('YYYY-MM-DD')
+        );
+        await createNewBill(
+            billList,
+            eventID,
+            involversList[2].id,
+            {
+                amount: 7063,
+                currency: 'USD',
+                precision: 2,
+            },
+            [
+                involversList[0].id,
+                involversList[1].id,
+                involversList[2].id,
+                involversList[3].id,
+                involversList[4].id,
+            ],
+            moment().format('YYYY-MM-DD')
+        );
+    }
     // logout information
 
     console.log('TEST USER ID:', userID);
