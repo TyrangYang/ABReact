@@ -19,7 +19,7 @@ import TransferList from './TransferList';
 
 const SelectInvolversToJoinEventDialog = ({ open, closeDialog }) => {
     const {
-        state: { currentEventID, currentUserID },
+        state: { currentEventID },
     } = useContext(eventStore);
 
     const [involverJoinEvent] = useMutation(ADD_NEW_INVOLVER_IN_EVENT, {
@@ -53,9 +53,7 @@ const SelectInvolversToJoinEventDialog = ({ open, closeDialog }) => {
         data: userData_Involvers,
         loading: userLoading,
         error: userError,
-    } = useQuery(GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID, {
-        variables: { userID: currentUserID },
-    });
+    } = useQuery(GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID);
 
     const [involverInEvent, involverOutEvent] = useMemo(() => {
         if (eventLoading || eventError || userLoading || userError)

@@ -8,6 +8,7 @@ const userSchema = new Schema({
     password: String,
     eventIDs: [String],
     involverIDs: [String],
+    tokenVersion: Number,
 });
 
 const eventSchema = new Schema({

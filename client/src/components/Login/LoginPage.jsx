@@ -19,6 +19,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { USER_LOGIN } from '../../queries';
 import { useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { setAccessToken } from '../../accessToken';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -57,22 +58,19 @@ const LoginPage = () => {
     const history = useHistory();
     const { handleSubmit, register, control } = useForm();
     const classes = useStyles();
-    const [userLogin, { _data, _loading, error: loginError }] = useMutation(
-        USER_LOGIN,
-        {
-            update(
-                _cache,
-                {
-                    data: {
-                        userLogin: { accessToken },
-                    },
-                }
-            ) {
-                // TODO: Store token
-                localStorage.setItem('accessToken', accessToken);
-            },
-        }
-    );
+    const [userLogin, { error: loginError }] = useMutation(USER_LOGIN, {
+        update(
+            _cache,
+            {
+                data: {
+                    userLogin: { accessToken },
+                },
+            }
+        ) {
+            // TODO: Store token && set the user state
+            setAccessToken(accessToken);
+        },
+    });
 
     return (
         <Container component="main" maxWidth="xs">
@@ -91,9 +89,7 @@ const LoginPage = () => {
                             await userLogin({
                                 variables: { email, password },
                             });
-                            // TODO: Store token
-
-                            // history.push('/event');
+                            history.push('/board');
                         } catch (error) {}
                     })}
                     noValidate

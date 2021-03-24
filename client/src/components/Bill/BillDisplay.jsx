@@ -17,6 +17,7 @@ const BillDisplay = () => {
 
     const { data, loading, error } = useQuery(GET_BILLS_BY_EVENT_ID, {
         variables: { eventID: currentEventID },
+        fetchPolicy: 'network-only',
     });
 
     const allBills = useMemo(() => {

@@ -42,15 +42,6 @@ function InvolverDisplay() {
                     <Avatar alt={name[0]} src="will be change" />
                     <span>{name}</span>
                 </div>,
-                //  TODO: delete button may not need
-                <IconButton
-                    color="secondary"
-                    onClick={() => {
-                        // solve snapshot problem (allBills ==> ref.current)
-                    }}
-                >
-                    <Delete />
-                </IconButton>,
             ];
         });
     }, [allInvolvers]);
@@ -62,10 +53,7 @@ function InvolverDisplay() {
         <div>
             {/* show involvers list */}
             {tableContent.length !== 0 ? (
-                <TableDisplay
-                    tableContent={tableContent}
-                    headers={['name', '']}
-                />
+                <TableDisplay tableContent={tableContent} headers={['name']} />
             ) : (
                 <h2>no Involver</h2>
             )}

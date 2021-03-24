@@ -25,7 +25,7 @@ import Styles from './InvolverDisplay.module.css';
 
 const CreateNewInvolverDialog = ({ open, closeDialog }) => {
     const {
-        state: { currentEventID, currentUserID },
+        state: { currentEventID },
     } = useContext(eventStore);
 
     const [involverJoinEvent] = useMutation(ADD_NEW_INVOLVER_IN_EVENT, {
@@ -51,11 +51,9 @@ const CreateNewInvolverDialog = ({ open, closeDialog }) => {
         update(cache, { data: { createNewInvolverToUser } }) {
             const { getInvolversInUser } = cache.readQuery({
                 query: GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID,
-                variables: { userID: currentUserID },
             });
             cache.writeQuery({
                 query: GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID,
-                variables: { userID: currentUserID },
                 data: {
                     getInvolversInUser: [
                         ...getInvolversInUser,
@@ -87,7 +85,6 @@ const CreateNewInvolverDialog = ({ open, closeDialog }) => {
                             data: { createNewInvolverToUser },
                         } = await createNewInvolver({
                             variables: {
-                                userID: currentUserID,
                                 involverName: e.newName,
                             },
                         });

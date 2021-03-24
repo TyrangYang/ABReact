@@ -54,9 +54,9 @@ module.exports = gql`
     type Query {
         getEventID: ID
         getUserID: ID
-        getUserInfoByID(userID: ID!): User
+        getUserInfoByID: User
         getEventInfoByID(eventID: ID!): Event
-        getInvolversInUser(userID: ID!): [Involver]
+        getInvolversInUser: [Involver]
         getInvolversInEvent(eventID: ID!): [Involver]
         getBillsInEvent(eventID: ID!): [Bill]
     }
@@ -79,7 +79,7 @@ module.exports = gql`
             eventName: String!
             eventCreateDate: String
         ): Event
-        createNewInvolverToUser(userID: ID!, involverName: String!): Involver
+        createNewInvolverToUser(involverName: String!): Involver
         involverJoinEvent(involverID: ID!, eventID: ID!): Involver
         addNewBillToEvent(
             eventID: ID!

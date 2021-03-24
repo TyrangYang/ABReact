@@ -3,15 +3,18 @@ const { REFRESH_TOKEN_SECRET, ACCESS_TOKEN_SECRET } = process.env;
 
 const createAccessToken = (user) => {
     return sign({ userID: user.id }, ACCESS_TOKEN_SECRET, {
-        expiresIn: '15m',
+        expiresIn: '5m',
     });
 };
 
-// TODO: add token version
 const createRefreshToken = (user) => {
-    return sign({ userID: user.id }, REFRESH_TOKEN_SECRET, {
-        expiresIn: '7d',
-    });
+    return sign(
+        { userID: user.id, tokenVersion: user.tokenVersion },
+        REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: '1d',
+        }
+    );
 };
 
 module.exports = { createAccessToken, createRefreshToken };

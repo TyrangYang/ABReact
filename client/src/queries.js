@@ -14,8 +14,8 @@ export const GET_EVENT_ID_unsafe = gql`
 `;
 
 export const GET_USER_BY_ID = gql`
-    query($userID: ID!) {
-        getUserInfoByID(userID: $userID) {
+    query {
+        getUserInfoByID {
             id
             name
             events {
@@ -66,8 +66,8 @@ export const GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID = gql`
 `;
 
 export const GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID = gql`
-    query($userID: ID!) {
-        getInvolversInUser(userID: $userID) {
+    query {
+        getInvolversInUser {
             id
             name
             joinedEventIDs
@@ -76,8 +76,8 @@ export const GET_INVOLVERS_IN_GIVEN_USER_BY_USER_ID = gql`
 `;
 
 export const CREATE_NEW_INVOLVER_IN_USER = gql`
-    mutation($userID: ID!, $involverName: String!) {
-        createNewInvolverToUser(userID: $userID, involverName: $involverName) {
+    mutation($involverName: String!) {
+        createNewInvolverToUser(involverName: $involverName) {
             id
             name
             joinedUserID

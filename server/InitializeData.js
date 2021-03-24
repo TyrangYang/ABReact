@@ -34,6 +34,7 @@ let main = async () => {
         password: password,
         eventIDs: [],
         involverIDs: [],
+        tokenVersion: 1,
     });
     const userID = user.id;
     await user.save();
@@ -114,7 +115,7 @@ let main = async () => {
         );
     };
 
-    for (let i = 0; i < 50; ++i) {
+    for (let i = 0; i < 1; ++i) {
         await createNewBill(
             billList,
             eventID,
@@ -196,10 +197,23 @@ let main = async () => {
     }
     // logout information
 
-    console.log('TEST USER ID:', userID);
-    console.log('TEST EVENT ID:', eventID);
+    console.log('# $userID:', userID);
+    console.log('# $eventID', eventID);
 
     console.log('----finish----');
+
+    // user2
+    // let password2 = await bcrypt.hash('1234', 5);
+    // let user2 = new userModel({
+    //     email: 'test2@test.com',
+    //     name: 'userName2',
+    //     password: password,
+    //     eventIDs: [],
+    //     involverIDs: [],
+    //     tokenVersion: 1,
+    // });
+    // const userID2 = user.id;
+    // await user.save();
     await db.close();
 };
 

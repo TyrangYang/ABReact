@@ -34,7 +34,7 @@ const isAuth = (context) => {
 
     try {
         const token = authorization.split(' ')[1];
-        return verify(token, ACCESS_TOKEN_SECRET);
+        return verify(token, process.env.ACCESS_TOKEN_SECRET);
     } catch (error) {
         throw new Error('not authorized');
     }
@@ -52,26 +52,28 @@ module.exports = {
             let res = await userModel.find();
             return res[0]._id;
         },
-        // TODO: userID should get from context
-        getUserInfoByID: async (parent, { userID }, context) => {
+        getUserInfoByID: async (parent, _, context) => {
             const payload = isAuth(context);
-            // const userID = payload.userID;
+            const userID = payload.userID;
             return await userModel.findById(userID);
         },
         getEventInfoByID: async (parent, { eventID }, context) => {
             isAuth(context);
             return await eventModel.findById(eventID);
         },
-        // TODO: userID should get from context
-        getInvolversInUser: async (parent, { userID }) => {
+        getInvolversInUser: async (parent, _, context) => {
+            const payload = isAuth(context);
+            const userID = payload.userID;
             let { involverIDs } = await userModel.findById(userID);
             return await involverModel.find({ _id: { $in: involverIDs } });
         },
-        getInvolversInEvent: async (parent, { eventID }) => {
+        getInvolversInEvent: async (parent, { eventID }, context) => {
+            isAuth(context);
             let { allInvolverIDs } = await eventModel.findById(eventID);
             return await involverModel.find({ _id: { $in: allInvolverIDs } });
         },
-        getBillsInEvent: async (parent, { eventID }) => {
+        getBillsInEvent: async (parent, { eventID }, context) => {
+            isAuth(context);
             let { allBillIDs } = await eventModel.findById(eventID);
             return await billModel.find({ _id: { $in: allBillIDs } });
         },
@@ -146,6 +148,7 @@ module.exports = {
                 accessToken: createAccessToken(user),
             };
         },
+        // TEMP : not used yet
 
         createUser: async (parent, args) => {
             let { name, email } = args;
@@ -157,8 +160,10 @@ module.exports = {
             });
             return await newUser.save();
         },
+        // TEMP : not used yet
 
-        createNewEvent: async (parent, args) => {
+        createNewEvent: async (parent, args, context) => {
+            isAuth(context);
             let { eventOwnerID, eventName, eventCreateDate } = args;
             let newEvent = new eventModel({
                 eventOwnerID,
@@ -173,8 +178,10 @@ module.exports = {
             return await newEvent.save();
         },
 
-        createNewInvolverToUser: async (parent, args) => {
-            let { userID, involverName } = args;
+        createNewInvolverToUser: async (parent, args, context) => {
+            const payload = isAuth(context);
+            let { involverName } = args;
+            const userID = payload.userID;
             let newInvolver = new involverModel({
                 name: involverName,
                 joinedUserID: userID,
@@ -187,7 +194,8 @@ module.exports = {
             return await newInvolver.save();
         },
 
-        involverJoinEvent: async (parent, args) => {
+        involverJoinEvent: async (parent, args, context) => {
+            isAuth(context);
             let { involverID, eventID } = args;
             let res1 = await eventModel.updateOne(
                 { _id: eventID },
@@ -200,7 +208,8 @@ module.exports = {
             );
         },
 
-        addNewBillToEvent: async (parent, args) => {
+        addNewBillToEvent: async (parent, args, context) => {
+            isAuth(context);
             let { eventID, payerID, amount, participantsID, date } = args;
             let newBill = new billModel({
                 eventID,
@@ -218,7 +227,8 @@ module.exports = {
             return await newBill.save();
         },
 
-        removeBillFromEvent: async (parent, args) => {
+        removeBillFromEvent: async (parent, args, context) => {
+            isAuth(context);
             let { eventID, billID } = args;
             let { nModified } = await eventModel.updateOne(
                 { _id: eventID },
@@ -227,6 +237,7 @@ module.exports = {
             if (!nModified) return null;
             return await billModel.findOneAndDelete({ _id: billID });
         },
+        // TODO : Auth?
 
         involverLeaveEvent: async (parent, args) => {
             let { eventID, involverID } = args;
