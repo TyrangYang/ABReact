@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useMemo, useEffect } from 'react';
 import { eventStore } from '../Event/EventContextProvider';
 import {
     GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
@@ -24,6 +24,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
+    Checkbox,
 } from '@material-ui/core';
 import Styles from './AddBillFormDialog.module.css';
 import MultiLineSlider from './MultiLineSlider';
@@ -34,12 +35,9 @@ const AddBillForm = ({ open, closeDialog }) => {
         state: { currentEventID },
     } = useContext(eventStore);
 
-    const { data, loading, error } = useQuery(
-        GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
-        {
-            variables: { eventID: currentEventID },
-        }
-    );
+    const { data, loading, error } = useQuery(GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID, {
+        variables: { eventID: currentEventID },
+    });
 
     const [addNewBill] = useMutation(CREATE_NEW_BILL_TO_EVENT, {
         update: (cache, { data: { addNewBillToEvent: curItem } }) => {
@@ -64,12 +62,20 @@ const AddBillForm = ({ open, closeDialog }) => {
     }, [data, loading, error]);
 
     // handle form
-    const { handleSubmit, register, watch, errors, control } = useForm();
+    const { handleSubmit, register, watch, errors, control, setValue } = useForm();
 
     // Watch variables those needed in evenly split on real-time
     const showUnevenlySplit = watch('unevenly');
     const formParticipants = watch('participants', []);
+    const payerIncluded = watch('payerIncluded');
+    const payer = watch('payer');
     const formAmount = watch('amount', 0);
+
+    useEffect(() => {
+        if (payerIncluded && payer && !formParticipants.find((e) => e.id === payer.id)) {
+            setValue('participants', [payer, ...formParticipants]);
+        }
+    }, [payer, payerIncluded, formParticipants]);
 
     const [unevenlyRes, setUnevenlyRes] = useState([]);
 
@@ -100,14 +106,13 @@ const AddBillForm = ({ open, closeDialog }) => {
                         id="add-bill-form"
                         className={Styles.addBillForm}
                         onSubmit={handleSubmit((e) => {
+                            console.log(e);
                             if (!e.unevenly) {
                                 addNewBill({
                                     variables: {
                                         eventID: currentEventID,
                                         payerID: e.payer.id,
-                                        participantsID: e.participants.map(
-                                            (e) => e.id
-                                        ),
+                                        participantsID: e.participants.map((e) => e.id),
                                         amount: {
                                             amount: +e.amount * 100,
                                             currency: 'USD',
@@ -139,15 +144,23 @@ const AddBillForm = ({ open, closeDialog }) => {
                         <FormControl error={!!errors.payer}>
                             <InputLabel id="Payer_label">Payer</InputLabel>
                             <Controller
-                                as={
-                                    <Select labelId="Payer_label" value="">
-                                        {allInvolvers.map((e) => (
-                                            <MenuItem key={e.id} value={e}>
-                                                {e.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                }
+                                render={({ onChange, value }) => {
+                                    return (
+                                        <Select
+                                            labelId="Payer_label"
+                                            value={value}
+                                            onChange={(e) => {
+                                                onChange(e.target.value);
+                                            }}
+                                        >
+                                            {allInvolvers.map((e) => (
+                                                <MenuItem key={e.id} value={e}>
+                                                    {e.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    );
+                                }}
                                 name="payer"
                                 defaultValue=""
                                 control={control}
@@ -172,36 +185,41 @@ const AddBillForm = ({ open, closeDialog }) => {
                                 },
                             })}
                             error={!!errors.amount}
-                            helperText={
-                                !!errors.amount && errors.amount.message
-                            }
+                            helperText={!!errors.amount && errors.amount.message}
                         />
 
                         <FormControl error={!!errors.participants}>
                             <InputLabel id="test"> Participant(s) </InputLabel>
                             <Controller
-                                as={
-                                    <Select multiple labelId="test">
-                                        {allInvolvers.map((e) => (
-                                            <MenuItem key={e.id} value={e}>
-                                                {e.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                }
+                                render={({ onChange, value }) => {
+                                    return (
+                                        <Select
+                                            multiple
+                                            labelId="test"
+                                            value={value}
+                                            onChange={(e) => {
+                                                onChange(e.target.value);
+                                            }}
+                                        >
+                                            {allInvolvers.map((e) => (
+                                                <MenuItem key={e.id} value={e}>
+                                                    {e.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    );
+                                }}
                                 name="participants"
                                 defaultValue={[]}
                                 control={control}
                                 rules={{
                                     required: true,
                                     validate: (value) =>
-                                        value.length > 0 ||
-                                        'At least one participant',
+                                        value.length > 0 || 'At least one participant',
                                 }}
                             />
                             <FormHelperText>
-                                {!!errors.participants &&
-                                    errors.participants.message}
+                                {!!errors.participants && errors.participants.message}
                             </FormHelperText>
                         </FormControl>
 
@@ -214,7 +232,27 @@ const AddBillForm = ({ open, closeDialog }) => {
                             error={!!errors.date}
                             helperText={!!errors.date && errors.date.message}
                         />
-
+                        <FormControlLabel
+                            control={
+                                <Controller
+                                    render={(props) => (
+                                        <Checkbox
+                                            onChange={(e) => {
+                                                let checked = e.target.checked;
+                                                props.onChange(checked);
+                                            }}
+                                            color="primary"
+                                            checked={props.value}
+                                        />
+                                    )}
+                                    control={control}
+                                    name="payerIncluded"
+                                    defaultValue={true}
+                                />
+                            }
+                            label="Payer Included"
+                            labelPlacement="start"
+                        />
                         <FormControlLabel
                             labelPlacement="start"
                             label="Unevenly split"
@@ -223,9 +261,7 @@ const AddBillForm = ({ open, closeDialog }) => {
                                     render={(props) => (
                                         <Switch
                                             checked={props.value}
-                                            onChange={(e) =>
-                                                props.onChange(e.target.checked)
-                                            }
+                                            onChange={(e) => props.onChange(e.target.checked)}
                                             color="primary"
                                             aria-labelledby="open-unevenly"
                                         />
@@ -237,23 +273,17 @@ const AddBillForm = ({ open, closeDialog }) => {
                             }
                         />
 
-                        {showUnevenlySplit &&
-                            !!formParticipants.length &&
-                            !!formAmount && (
-                                <MultiLineSlider
-                                    formParticipants={formParticipants}
-                                    totalAmount={+formAmount}
-                                    outGoingRes={setUnevenlyRes}
-                                />
-                            )}
+                        {showUnevenlySplit && !!formParticipants.length && !!formAmount && (
+                            <MultiLineSlider
+                                formParticipants={formParticipants}
+                                totalAmount={+formAmount}
+                                outGoingRes={setUnevenlyRes}
+                            />
+                        )}
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        color="primary"
-                        onClick={closeDialog}
-                        data-testid="cancel-btn"
-                    >
+                    <Button color="primary" onClick={closeDialog} data-testid="cancel-btn">
                         Cancel
                     </Button>
                     <Button
