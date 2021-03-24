@@ -11,6 +11,7 @@ export const eventStore = createContext(initialState);
 const { Provider } = eventStore;
 
 function EventContextProvider({ children, eventID }) {
+    // TODO: userID and eventID are temporary
     const { data: d1, loading: l1, error: e1 } = useQuery(GET_USER_ID_unsafe);
     const { data: d2, loading: l2, error: e2 } = useQuery(GET_EVENT_ID_unsafe);
 

@@ -3,9 +3,15 @@ const {
     involverModel,
     billModel,
     userModel,
-} = require('../database/model');
+} = require('./database/model');
+const { verify } = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const moment = require('moment');
 
+const { createRefreshToken, createAccessToken } = require('./authToken');
+// dataLoader for n+1 problem
 const DataLoader = require('dataloader');
+
 const payerLoader = new DataLoader((keys) => {
     // return promise
     let res = keys.map(async (payerID) => {
@@ -13,16 +19,27 @@ const payerLoader = new DataLoader((keys) => {
     });
     return Promise.resolve(res);
 });
-const participantsLoader = new DataLoader((keys) => {
-    console.log(keys);
+const participantLoader = new DataLoader((keys) => {
     let res = keys.map(async (participantID) => {
         return await involverModel.findById(participantID);
     });
     return Promise.resolve(res);
 });
 
-const moment = require('moment');
-let queryCount = 0;
+const isAuth = (context) => {
+    const authorization = context.req.headers['authorization'];
+    if (!authorization) {
+        throw new Error('No authorization felid in header');
+    }
+
+    try {
+        const token = authorization.split(' ')[1];
+        return verify(token, ACCESS_TOKEN_SECRET);
+    } catch (error) {
+        throw new Error('not authorized');
+    }
+};
+
 module.exports = {
     Query: {
         // TEMP
@@ -35,12 +52,17 @@ module.exports = {
             let res = await userModel.find();
             return res[0]._id;
         },
-        getUserInfoByID: async (parent, { userID }) => {
+        // TODO: userID should get from context
+        getUserInfoByID: async (parent, { userID }, context) => {
+            const payload = isAuth(context);
+            // const userID = payload.userID;
             return await userModel.findById(userID);
         },
-        getEventInfoByID: async (parent, { eventID }) => {
+        getEventInfoByID: async (parent, { eventID }, context) => {
+            isAuth(context);
             return await eventModel.findById(eventID);
         },
+        // TODO: userID should get from context
         getInvolversInUser: async (parent, { userID }) => {
             let { involverIDs } = await userModel.findById(userID);
             return await involverModel.find({ _id: { $in: involverIDs } });
@@ -50,7 +72,6 @@ module.exports = {
             return await involverModel.find({ _id: { $in: allInvolverIDs } });
         },
         getBillsInEvent: async (parent, { eventID }) => {
-            console.log(++queryCount);
             let { allBillIDs } = await eventModel.findById(eventID);
             return await billModel.find({ _id: { $in: allBillIDs } });
         },
@@ -73,7 +94,7 @@ module.exports = {
             return await payerLoader.load(parent.payerID);
         },
         participants: async (parent, args) => {
-            return await participantsLoader.loadMany(parent.participantsID);
+            return await participantLoader.loadMany(parent.participantsID);
         },
     },
 
@@ -106,6 +127,26 @@ module.exports = {
     },
 
     Mutation: {
+        userLogin: async (parent, { email, password }, context) => {
+            let user = await userModel.findOne({ email: email });
+            if (!user) {
+                throw new Error('email or password is incorrect');
+            }
+            let isCorrect = await bcrypt.compare(password, user.password);
+            if (!isCorrect) {
+                throw new Error('email or password is incorrect');
+            }
+
+            // user or password correct
+
+            context.res.cookie('jid', createRefreshToken(user), {
+                httpOnly: true,
+            });
+            return {
+                accessToken: createAccessToken(user),
+            };
+        },
+
         createUser: async (parent, args) => {
             let { name, email } = args;
             let newUser = new userModel({
@@ -116,6 +157,7 @@ module.exports = {
             });
             return await newUser.save();
         },
+
         createNewEvent: async (parent, args) => {
             let { eventOwnerID, eventName, eventCreateDate } = args;
             let newEvent = new eventModel({
@@ -130,6 +172,7 @@ module.exports = {
             );
             return await newEvent.save();
         },
+
         createNewInvolverToUser: async (parent, args) => {
             let { userID, involverName } = args;
             let newInvolver = new involverModel({
@@ -143,6 +186,7 @@ module.exports = {
             );
             return await newInvolver.save();
         },
+
         involverJoinEvent: async (parent, args) => {
             let { involverID, eventID } = args;
             let res1 = await eventModel.updateOne(

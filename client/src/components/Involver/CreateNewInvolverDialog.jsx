@@ -147,7 +147,6 @@ const CreateNewInvolverDialog = ({ open, closeDialog }) => {
                 <Button
                     color="primary"
                     onClick={() => {
-                        console.log(open);
                         closeDialog();
                     }}
                 >

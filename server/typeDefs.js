@@ -5,6 +5,7 @@ module.exports = gql`
         id: ID!
         email: String!
         name: String!
+        password: String!
         eventIDs: [ID]!
         involverIDs: [ID]!
         events: [Event]
@@ -66,7 +67,12 @@ module.exports = gql`
         precision: Int!
     }
 
+    type LoginResponse {
+        accessToken: String!
+    }
+
     type Mutation {
+        userLogin(email: String!, password: String!): LoginResponse
         createUser(email: String, name: String): User
         createNewEvent(
             eventOwnerID: ID!

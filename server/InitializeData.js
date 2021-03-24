@@ -1,10 +1,6 @@
 const moment = require('moment');
-const {
-    connect: databaseConnect,
-    close,
-    drop,
-} = require('./database/dbConnection');
 const databaseConfig = require('./database/databaseConfig.json');
+const bcrypt = require('bcryptjs');
 
 const mongoose = require('mongoose');
 const {
@@ -31,9 +27,11 @@ let main = async () => {
         console.log('error:', e.codeName);
     }
     //  1. Create user
+    let password = await bcrypt.hash('123', 5);
     let user = new userModel({
         email: 'test@test.com',
         name: 'userName1',
+        password: password,
         eventIDs: [],
         involverIDs: [],
     });

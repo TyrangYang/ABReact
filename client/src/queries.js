@@ -175,4 +175,10 @@ export const REMOVE_BILL_FROM_EVENT = gql`
     }
 `;
 
-// removeBillFromEvent(eventID: ID!, billID: ID!): Bill`;
+export const USER_LOGIN = gql`
+    mutation($email: String!, $password: String!) {
+        userLogin(email: $email, password: $password) {
+            accessToken
+        }
+    }
+`;

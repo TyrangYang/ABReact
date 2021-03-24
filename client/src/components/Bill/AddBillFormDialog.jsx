@@ -101,7 +101,6 @@ const AddBillForm = ({ open, closeDialog }) => {
                         className={Styles.addBillForm}
                         onSubmit={handleSubmit((e) => {
                             if (!e.unevenly) {
-                                console.log(e);
                                 addNewBill({
                                     variables: {
                                         eventID: currentEventID,
