@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { setAccessToken } from './accessToken';
-import Layout from './components/Event/Layout';
+import EventBoard from './components/board/EventBoard';
+import OneEventLayout from './components/Event/OneEventLayout';
 import LoginPage from './components/Login/LoginPage';
+import LogoutBtn from './components/Logout/LogoutBtn';
 import DataLoading from './components/widgets/DataLoading';
 
 function App() {
     const [loading, setLoading] = useState(true);
-
-    // refresh token all app refresh
+    // refresh token when refresh you page
     useEffect(() => {
         fetch('http://localhost:4000/refresh_token', {
             method: 'post',
@@ -22,7 +23,7 @@ function App() {
     }, []);
 
     if (loading) {
-        return <DataLoading />;
+        return <DataLoading loading={loading} />;
     }
 
     return (
@@ -38,23 +39,24 @@ function App() {
                     <li>
                         <Link to="/board">board</Link>
                     </li>
-                    <li>
-                        <Link to="/event">event</Link>
-                    </li>
                 </ul>
             </nav>
             <Switch>
                 <Route exact path="/">
-                    <div>home</div>
+                    <div>Home</div>
+                    <LogoutBtn />
                 </Route>
                 <Route path="/login">
                     <LoginPage />
                 </Route>
                 <Route path="/board">
-                    <div>all event</div>
+                    <EventBoard />
                 </Route>
-                <Route path="/event">
-                    <Layout />
+                <Route path="/event/:id">
+                    <OneEventLayout />
+                </Route>
+                <Route path="*">
+                    <div>not match</div>
                 </Route>
             </Switch>
         </Router>

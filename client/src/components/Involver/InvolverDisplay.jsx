@@ -1,7 +1,6 @@
 import React, { useMemo, useContext } from 'react';
 
-import { IconButton, Avatar } from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
+import { Avatar } from '@material-ui/core';
 
 import { useQuery } from '@apollo/client';
 import { GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID } from '../../queries';
@@ -16,12 +15,9 @@ function InvolverDisplay() {
         state: { currentEventID },
     } = useContext(eventStore);
 
-    const { data, loading, error } = useQuery(
-        GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID,
-        {
-            variables: { eventID: currentEventID },
-        }
-    );
+    const { data, loading, error } = useQuery(GET_INVOLVERS_IN_GIVEN_EVENT_BY_EVENT_ID, {
+        variables: { eventID: currentEventID },
+    });
 
     const allInvolvers = useMemo(() => {
         if (loading || error) return [];
@@ -30,7 +26,7 @@ function InvolverDisplay() {
 
     const tableContent = useMemo(() => {
         return allInvolvers.map((e) => {
-            let { id, name } = e;
+            let { name } = e;
             return [
                 <div
                     style={{

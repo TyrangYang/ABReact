@@ -3,12 +3,7 @@ const databaseConfig = require('./database/databaseConfig.json');
 const bcrypt = require('bcryptjs');
 
 const mongoose = require('mongoose');
-const {
-    eventModel,
-    involverModel,
-    billModel,
-    userModel,
-} = require('./database/model');
+const { eventModel, involverModel, billModel, userModel } = require('./database/model');
 
 let main = async () => {
     mongoose.connect(databaseConfig.uri, {
@@ -49,10 +44,7 @@ let main = async () => {
     });
 
     const eventID = event.id;
-    await userModel.updateOne(
-        { _id: userID },
-        { $push: { eventIDs: eventID } }
-    );
+    await userModel.updateOne({ _id: userID }, { $push: { eventIDs: eventID } });
     await event.save();
 
     // 3. Create involver and add this involver to user
@@ -66,10 +58,7 @@ let main = async () => {
         involversList.push(tmpInvolver);
         tmpInvolverID = tmpInvolver.id;
         await tmpInvolver.save();
-        await userModel.updateOne(
-            { _id: userID },
-            { $push: { involverIDs: tmpInvolverID } }
-        );
+        await userModel.updateOne({ _id: userID }, { $push: { involverIDs: tmpInvolverID } });
     }
 
     // 4. Involver join in the event
@@ -77,27 +66,14 @@ let main = async () => {
     for (let i = 0; i < 6; i++) {
         let { id } = involversList[i];
 
-        await involverModel.updateOne(
-            { _id: id },
-            { $push: { joinedEventIDs: eventID } }
-        );
+        await involverModel.updateOne({ _id: id }, { $push: { joinedEventIDs: eventID } });
 
-        await eventModel.updateOne(
-            { _id: eventID },
-            { $push: { allInvolverIDs: id } }
-        );
+        await eventModel.updateOne({ _id: eventID }, { $push: { allInvolverIDs: id } });
     }
 
     // 5. add Bill to event
     let billList = [];
-    let createNewBill = async (
-        billList,
-        eventID,
-        payerID,
-        amount,
-        participantsID,
-        date
-    ) => {
+    let createNewBill = async (billList, eventID, payerID, amount, participantsID, date) => {
         let bill = new billModel({
             eventID,
             payerID,
@@ -109,10 +85,7 @@ let main = async () => {
         await bill.save();
         billList.push(bill);
 
-        await eventModel.updateOne(
-            { _id: eventID },
-            { $push: { allBillIDs: bill.id } }
-        );
+        await eventModel.updateOne({ _id: eventID }, { $push: { allBillIDs: bill.id } });
     };
 
     for (let i = 0; i < 1; ++i) {
@@ -195,25 +168,26 @@ let main = async () => {
             moment().format('YYYY-MM-DD')
         );
     }
-    // logout information
+    // TODO: logout information
 
-    console.log('# $userID:', userID);
+    // create empty user2
+    let password2 = await bcrypt.hash('1234', 5);
+    let user2 = new userModel({
+        email: 'test2@test.com',
+        name: 'userName2',
+        password: password2,
+        eventIDs: [],
+        involverIDs: [],
+        tokenVersion: 1,
+    });
+    const userID2 = user2.id;
+    await user2.save();
+
+    console.log('# $userID1:', userID);
+    console.log('# $userID2:', userID2);
     console.log('# $eventID', eventID);
 
     console.log('----finish----');
-
-    // user2
-    // let password2 = await bcrypt.hash('1234', 5);
-    // let user2 = new userModel({
-    //     email: 'test2@test.com',
-    //     name: 'userName2',
-    //     password: password,
-    //     eventIDs: [],
-    //     involverIDs: [],
-    //     tokenVersion: 1,
-    // });
-    // const userID2 = user.id;
-    // await user.save();
     await db.close();
 };
 

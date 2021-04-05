@@ -35,6 +35,7 @@ const authLink = setContext((_, { headers }) => {
     };
 });
 
+// Use refresh token to automatically refresh accessToken
 const tokenAutoRefreshLink = new TokenRefreshLink({
     accessTokenField: 'accessToken',
     isTokenValidOrUndefined: () => {

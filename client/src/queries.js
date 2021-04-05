@@ -1,18 +1,5 @@
 import { gql } from '@apollo/client';
 
-// TEMP
-export const GET_USER_ID_unsafe = gql`
-    query {
-        getUserID
-    }
-`;
-// TEMP
-export const GET_EVENT_ID_unsafe = gql`
-    query {
-        getEventID
-    }
-`;
-
 export const GET_USER_BY_ID = gql`
     query {
         getUserInfoByID {
@@ -22,6 +9,39 @@ export const GET_USER_BY_ID = gql`
                 id
                 eventName
             }
+        }
+    }
+`;
+
+export const USER_LOGIN = gql`
+    mutation($email: String!, $password: String!) {
+        userLogin(email: $email, password: $password) {
+            accessToken
+        }
+    }
+`;
+
+export const USER_LOGOUT = gql`
+    mutation {
+        userLogout
+    }
+`;
+
+export const GET_EVENTS_FROM_USER = gql`
+    query {
+        getEventsFromUser {
+            id
+            eventName
+            eventCreateDate
+        }
+    }
+`;
+
+export const CREATE_NEW_EVENT_TO_USER = gql`
+    mutation($eventName: String!) {
+        createNewEvent(eventName: $eventName) {
+            id
+            eventName
         }
     }
 `;
@@ -171,14 +191,6 @@ export const REMOVE_BILL_FROM_EVENT = gql`
                 precision
             }
             date
-        }
-    }
-`;
-
-export const USER_LOGIN = gql`
-    mutation($email: String!, $password: String!) {
-        userLogin(email: $email, password: $password) {
-            accessToken
         }
     }
 `;

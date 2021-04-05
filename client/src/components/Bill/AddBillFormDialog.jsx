@@ -75,7 +75,7 @@ const AddBillForm = ({ open, closeDialog }) => {
         if (payerIncluded && payer && !formParticipants.find((e) => e.id === payer.id)) {
             setValue('participants', [payer, ...formParticipants]);
         }
-    }, [payer, payerIncluded, formParticipants]);
+    }, [payer, payerIncluded, formParticipants, setValue]);
 
     const [unevenlyRes, setUnevenlyRes] = useState([]);
 
@@ -106,7 +106,6 @@ const AddBillForm = ({ open, closeDialog }) => {
                         id="add-bill-form"
                         className={Styles.addBillForm}
                         onSubmit={handleSubmit((e) => {
-                            console.log(e);
                             if (!e.unevenly) {
                                 addNewBill({
                                     variables: {

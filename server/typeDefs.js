@@ -55,6 +55,7 @@ module.exports = gql`
         getEventID: ID
         getUserID: ID
         getUserInfoByID: User
+        getEventsFromUser: [Event]
         getEventInfoByID(eventID: ID!): Event
         getInvolversInUser: [Involver]
         getInvolversInEvent(eventID: ID!): [Involver]
@@ -73,12 +74,9 @@ module.exports = gql`
 
     type Mutation {
         userLogin(email: String!, password: String!): LoginResponse
+        userLogout: Boolean
         createUser(email: String, name: String): User
-        createNewEvent(
-            eventOwnerID: ID!
-            eventName: String!
-            eventCreateDate: String
-        ): Event
+        createNewEvent(eventName: String!, eventCreateDate: String): Event
         createNewInvolverToUser(involverName: String!): Involver
         involverJoinEvent(involverID: ID!, eventID: ID!): Involver
         addNewBillToEvent(

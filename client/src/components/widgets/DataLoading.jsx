@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import propTypes from 'prop-types';
 import { CircularProgress } from '@material-ui/core';
 
-function Loading({ loading, error }) {
+function DataLoading({ loading, error }) {
     return (
         <div>
             <h2>Loading</h2>
@@ -17,9 +17,9 @@ function Loading({ loading, error }) {
     );
 }
 
-Loading.prototype = {
+DataLoading.prototype = {
     loading: propTypes.bool.isRequired,
     error: propTypes.object,
 };
 
-export default memo(Loading);
+export default memo(DataLoading);

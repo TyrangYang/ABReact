@@ -89,6 +89,7 @@ const LoginPage = () => {
                             await userLogin({
                                 variables: { email, password },
                             });
+                            console.log(history);
                             history.push('/board');
                         } catch (error) {}
                     })}
@@ -129,9 +130,7 @@ const LoginPage = () => {
                             <Controller
                                 render={(props) => (
                                     <Checkbox
-                                        onChange={(e) =>
-                                            props.onChange(e.target.checked)
-                                        }
+                                        onChange={(e) => props.onChange(e.target.checked)}
                                         color="primary"
                                         checked={props.value}
                                     />

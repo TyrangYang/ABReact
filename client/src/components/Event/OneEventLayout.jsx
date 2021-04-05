@@ -7,10 +7,12 @@ import BillPanel from './BillPanel';
 import TestPart from '../testComponent';
 
 import EventContextProvider from './EventContextProvider';
+import { useParams } from 'react-router';
 
-export default function Layout() {
+export default function OneEventLayout() {
+    let { id: eventID } = useParams();
     return (
-        <EventContextProvider eventID="604707eb6db86bbbdbd4392a">
+        <EventContextProvider eventID={eventID}>
             <Grid container>
                 <TestPart />
                 <Grid item sm={9}>
