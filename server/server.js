@@ -30,11 +30,15 @@ const { createAccessToken } = require('./authToken');
         if (!refreshToken) return res.send({ ok: false, accessToken: '' });
 
         try {
-            let payload = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            let payload = verify(
+                refreshToken,
+                process.env.REFRESH_TOKEN_SECRET
+            );
             const user = await userModel.findById({ _id: payload.userID });
 
             //  check token version
-            if (user.tokenVersion !== payload.tokenVersion) throw new Error('token expired');
+            if (user.tokenVersion !== payload.tokenVersion)
+                throw new Error('token expired');
 
             return res.send({ ok: true, accessToken: createAccessToken(user) });
         } catch (error) {
